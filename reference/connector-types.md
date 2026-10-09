@@ -71,6 +71,7 @@ That is `MX-F-2R.toml` verbatim. Copying a bundled type that resembles what you 
 ### `[connector]`
 
 - `name` — human-readable name for the connector family.
+- `default_pins` — optional list of pin counts per row, such as `[8, 8, 2]`. It is what the designer's **New Connector** starts with, named `PIN1`, `PIN2`, and so on. Without it a new connector starts with one pin. It has no effect on the command line.
 - `style` — how the body is drawn. One of:
   - `box` — a plain rectangle.
   - `latch` — a latching housing (JST XH / PH look).
