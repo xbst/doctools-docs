@@ -6,18 +6,17 @@ A file referenced from Markdown has no surrounding text to inherit from, so
 each icon is emitted here with an explicit neutral gray that stays legible on
 both GitHub's light and dark backgrounds.
 
-Run after changing SYMBOLS to refresh docs/reference/board-toml.md's table:
+Run after changing SYMBOLS in pinconnect to refresh the symbol table in
+docs/pinconnect/reference/board-toml.md:
 
     python tools/symbol-icons/generate.py
 """
-import sys
 from pathlib import Path
 
-_ROOT = Path(__file__).resolve().parent.parent.parent
-sys.path.insert(0, str(_ROOT / "src"))
 from pinconnect.symbols import SYMBOLS, _ALIASES
 
-OUT_DIR = _ROOT / "assets" / "symbols"
+_ROOT = Path(__file__).resolve().parent.parent.parent
+OUT_DIR = _ROOT / "docs" / "assets" / "pinconnect" / "symbols"
 
 # Mid-gray reads on white and on GitHub's dark background alike.
 INK = "#888888"
@@ -47,7 +46,7 @@ def main() -> None:
             _SVG.format(ink=INK, inner=inner.replace("currentColor", INK)),
             encoding="utf-8",
         )
-        print(f"  {name} -> assets/symbols/{path.name}")
+        print(f"  {name} -> {path.relative_to(_ROOT).as_posix()}")
     print(f"  {len(SYMBOLS)} icons")
 
     # The docs table pairs each icon with its aliases; print them so the table

@@ -1,8 +1,9 @@
 # Jumper settings sample: one pin header for each common shape.
 #
-# Used by tools/jumper-gallery/generate.py for the docs images, and handy as a
-# starting point: open it in the designer to see each header's settings. The
-# board image is not included; the generator makes a plain one.
+# The live jumper example on the docs site, the source of the jumper doc
+# images (tools/jumper-gallery/generate.py), and handy as a starting point:
+# open it in the designer to see each header's settings. jumpers.png is a
+# plain board drawn to this size; the image generator makes its own.
 #
 # Jumpers name pins by their number in the pin list, counted from 1 in the
 # order the pins are written. The two-row headers below list their pins column
@@ -11,7 +12,7 @@
 
 [board]
 title = "Jumper settings"
-image = "board.png"
+image = "jumpers.png"
 width = 1400
 height = 900
 

@@ -6,7 +6,7 @@ tooltip so a single frame shows nearly every theme token — list, symbols,
 tooltip, connector housing, pin labels, active-item highlight — then save a
 trimmed WebP.
 
-Outputs ``assets/theme-<name>-{light,dark}.webp`` for default/slate/ocean/
+Outputs ``docs/assets/pinconnect/theme-<name>-{light,dark}.webp`` for default/slate/ocean/
 terminal/midnight/workbench.
 
 Run from the repository root:
@@ -19,7 +19,6 @@ content. Requires ``playwright`` and ``pillow``; Playwright drives the system
 Chrome (``channel="chrome"``), so there is no browser download. The pinouts
 load their fonts from Google Fonts, so this needs network access.
 """
-import os
 import socket
 import sys
 import shutil
@@ -32,7 +31,7 @@ from playwright.sync_api import sync_playwright
 from PIL import Image
 
 REPO = Path(__file__).resolve().parent.parent.parent
-ASSETS = REPO / "assets"
+ASSETS = REPO / "docs" / "assets" / "pinconnect"
 THEMES = ["default", "slate", "ocean", "terminal", "midnight", "workbench"]
 # Frame heights that differ from the 760px default: ocean stacks its list below
 # the board (captured full page), workbench parks the pinout in a panel under it.
@@ -56,7 +55,7 @@ def generate_pinouts(toml_path: Path, png_path: Path, work: Path):
         out = work / f"{theme}.html"
         subprocess.run([sys.executable, "-m", "pinconnect", str(toml_path),
                         "-o", str(out), "-t", theme],
-                       env={**os.environ, "PYTHONPATH": str(REPO / "src")}, check=True,
+                       check=True,
                        stdout=subprocess.DEVNULL)
         print(f"  generated {theme}.html")
 
@@ -112,7 +111,7 @@ def main(toml_path: Path, png_path: Path):
         work = Path(td)
         generate_pinouts(toml_path, png_path, work)
         shoot(work)
-    print("OK - 12 theme gallery images written to assets/")
+    print(f"OK - 12 theme gallery images written to {ASSETS.relative_to(REPO).as_posix()}/")
 
 
 if __name__ == "__main__":

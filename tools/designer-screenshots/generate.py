@@ -1,4 +1,4 @@
-"""Regenerate the 9 designer.md screenshots of the visual designer.
+"""Regenerate the 9 screenshots in the PinConnect designer docs of the visual designer.
 
 Playwright drives the system Chrome against the designer served on a local
 port, loads a sample board (image first, then TOML), and captures each panel.
@@ -16,6 +16,7 @@ Requires ``playwright`` (``pip install playwright``); it drives the system
 Chrome (``channel="chrome"``), so there is no browser download. The designer
 loads Roboto from Google Fonts, so this needs network access.
 """
+import shutil
 import sys
 import tempfile
 import time
@@ -27,7 +28,7 @@ from threading import Thread
 from playwright.sync_api import sync_playwright
 
 REPO = Path(__file__).resolve().parent.parent.parent
-ASSETS = REPO / "assets"
+ASSETS = REPO / "docs" / "assets" / "pinconnect"
 
 # Maintainer's sample board (Birds-Nest-CAN), outside the repo. Override by
 # passing a board TOML + image on the command line.
@@ -54,22 +55,36 @@ def _without_local_dirs(toml_path: Path, tmp: Path) -> Path:
     return out
 
 
+def _served_designer(tmp: Path) -> Path:
+    """A copy of the installed designer, with its payload built beside it.
+
+    An installed pinconnect keeps the payload in the user cache rather than in
+    the designer folder, so serving that folder as is would boot into
+    "Renderer unavailable". The copy gets its own payload, the way the docs
+    describe serving an installed designer by hand, and site-packages is left
+    alone.
+    """
+    from pinconnect.payload import PAYLOAD_NAME, build_payload, designer_root
+    root = tmp / "designer"
+    shutil.copytree(designer_root(), root,
+                    ignore=shutil.ignore_patterns(PAYLOAD_NAME, "__pycache__"))
+    build_payload(root / PAYLOAD_NAME)
+    return root
+
+
 def main(toml_path: Path, png_path: Path):
     # The designer fetches a Python payload at startup and refuses to run
     # without it, so build it before serving. Skipping this captured
     # screenshots of a designer reading "Renderer unavailable" with its
     # connector drawings missing.
-    sys.path.insert(0, str(REPO / "src"))
-    from pinconnect.payload import PAYLOAD_NAME, build_payload, designer_root
-    designer = designer_root()
-    build_payload(designer / PAYLOAD_NAME)
+    tmpdir = tempfile.TemporaryDirectory()
+    designer = _served_designer(Path(tmpdir.name))
 
     handler = partial(SimpleHTTPRequestHandler, directory=str(designer))
     server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
     server_thread = Thread(target=server.serve_forever, daemon=True)
     server_thread.start()
     url = f"http://127.0.0.1:{server.server_port}/"
-    tmpdir = tempfile.TemporaryDirectory()
     try:
         toml_path = _without_local_dirs(toml_path, Path(tmpdir.name))
         with sync_playwright() as pw:
@@ -184,7 +199,7 @@ def main(toml_path: Path, png_path: Path):
             page.locator(".modal").screenshot(path=str(ASSETS / "designer-about.png"))
 
             browser.close()
-        print("OK - 9 designer screenshots written to assets/")
+        print(f"OK - 9 designer screenshots written to {ASSETS.relative_to(REPO).as_posix()}/")
     finally:
         server.shutdown()
         server.server_close()

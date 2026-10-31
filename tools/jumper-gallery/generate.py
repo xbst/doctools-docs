@@ -1,13 +1,14 @@
-"""Regenerate the jumper settings doc images from the sample board here.
+"""Regenerate the jumper settings doc images from the jumper sample board.
 
-  - assets/jumper-shapes.webp     — six pinned tooltips, one per common header
-                                    shape, each showing one setting
-                                    (docs/reference/board-toml.md)
-  - assets/workflow-jumpers.png   — the designer's connector editor in pick mode
-                                    for the fan voltage selector (docs/designer.md)
+  - docs/assets/pinconnect/jumper-shapes.webp    — six pinned tooltips, one per
+                                    common header shape, each showing one setting
+                                    (docs/pinconnect/reference/board-toml.md)
+  - docs/assets/pinconnect/workflow-jumpers.png  — the designer's connector editor
+                                    in pick mode for the fan voltage selector
+                                    (docs/pinconnect/designer.md)
 
-Both come from sample.toml beside this script, so no board outside the repo is
-needed. The tooltips are the generator's real page, rendered with pinconnect and
+Both come from docs/pinouts/jumpers/jumpers.toml, the sample the site's live
+jumper example also renders, so no board outside the repo is needed. The tooltips are the generator's real page, rendered with pinconnect and
 opened in the system Chrome; the designer shot drives the real designer.
 
 Run from the repository root:
@@ -19,7 +20,7 @@ Playwright drives the system Chrome (``channel="chrome"``), so there is no
 browser download. The page and the designer load Roboto from Google Fonts and
 the designer loads Pyodide from a CDN, so this needs network access.
 """
-import sys
+import shutil
 import tempfile
 import time
 from functools import partial
@@ -32,12 +33,11 @@ from playwright.sync_api import sync_playwright
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parent.parent
-ASSETS = REPO / "assets"
-SAMPLE = HERE / "sample.toml"
-sys.path.insert(0, str(REPO / "src"))
+ASSETS = REPO / "docs" / "assets" / "pinconnect"
+SAMPLE = REPO / "docs" / "pinouts" / "jumpers" / "jumpers.toml"
 
-from pinconnect.config import Theme, load_all_connector_types, load_board  # noqa: E402
-from pinconnect.renderer import generate_html  # noqa: E402
+from pinconnect.config import Theme, load_all_connector_types, load_board
+from pinconnect.renderer import generate_html
 
 # Gallery order and the setting each card shows (indexes into the connector's
 # settings), picked so every card has at least one jumper fitted.
@@ -107,12 +107,28 @@ def shapes(browser, tmp: Path):
     print(f"  -> {out.relative_to(REPO)}  {sheet.size[0]}x{sheet.size[1]}  {out.stat().st_size // 1024}KB")
 
 
+def _served_designer(tmp: Path) -> Path:
+    """A copy of the installed designer, with its payload built beside it.
+
+    An installed pinconnect keeps the payload in the user cache rather than in
+    the designer folder, so serving that folder as is would boot into
+    "Renderer unavailable". The copy gets its own payload, the way the docs
+    describe serving an installed designer by hand, and site-packages is left
+    alone.
+    """
+    from pinconnect.payload import PAYLOAD_NAME, build_payload, designer_root
+    root = tmp / "designer"
+    shutil.copytree(designer_root(), root,
+                    ignore=shutil.ignore_patterns(PAYLOAD_NAME, "__pycache__"))
+    build_payload(root / PAYLOAD_NAME)
+    return root
+
+
 def designer(browser):
     # The designer fetches its Python payload at startup and will not draw
     # without it, so build it before serving.
-    from pinconnect.payload import PAYLOAD_NAME, build_payload, designer_root
-    root = designer_root()
-    build_payload(root / PAYLOAD_NAME)
+    tmp = tempfile.TemporaryDirectory()
+    root = _served_designer(Path(tmp.name))
     class Quiet(SimpleHTTPRequestHandler):
         def log_message(self, *args):
             pass
@@ -120,7 +136,6 @@ def designer(browser):
     handler = partial(Quiet, directory=str(root))
     server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
     Thread(target=server.serve_forever, daemon=True).start()
-    tmp = tempfile.TemporaryDirectory()
     try:
         page = browser.new_context(viewport={"width": 1440, "height": 1100}, device_scale_factor=2,
                                    color_scheme="dark").new_page()
