@@ -2,26 +2,26 @@
 
 The designer is where a board photo becomes a pinout. You load an image, draw a box over each connector, label the pins, and press Generate. It also writes a [board config](reference/board-toml.md) as you work, which you save so you can come back to the board later.
 
-It runs the real generator in your browser rather than an imitation of it, so the preview is the file you download, and that file is identical to what the `pinout-gen` command produces from the same config.
+It runs the real generator in your browser rather than an imitation of it, so the preview is the file you download, and that file is identical to what the `pinconnect` command produces from the same config.
 
 ## Running it
 
 Use the hosted designer at **<https://pinconnect.isiks.tech>**. Nothing is uploaded: your photo and your config stay in the browser.
 
-To run it yourself, install the tool and start serve mode:
+To run it yourself, install the tool and run it with no arguments:
 
 ```bash
-pip install ./pinout_gen
-pinout-gen --serve
+pip install "git+https://github.com/xbst/PinConnect.git@master"
+pinconnect
 ```
 
-That picks a free port, opens a browser, and prints the address. Add `--serve 8000` to choose the port, or `--no-browser` to leave the browser alone.
+That picks a free port, opens a browser, and prints the address. Add `--port 8000` to choose the port, or `--no-browser` to leave the browser alone.
 
-The designer must be served over HTTP. It fetches its runtime at startup, so opening `index.html` from disk does not work.
+The designer must be served over HTTP. It fetches its runtime at startup, so opening `index.html` from disk does not work. To serve it with your own web server, see [serving the designer by hand](command-line.md#serving-the-designer-by-hand).
 
 ## The interface
 
-![The PinConnect Designer with the sample board loaded: the connector list on the left, the board image top-right, and the connector editor bottom-right](../assets/designer-overview.png)
+![The PinConnect Designer with the sample board loaded: the connector list on the left, the board image top-right, and the connector editor bottom-right](../assets/pinconnect/designer-overview.png)
 
 A toolbar across the top, and three panels whose dividers you can drag:
 
@@ -40,7 +40,7 @@ The **Theme** selector sets the board's `theme`, which controls the colors, font
 
 Click **Open Image** and choose your photo, taken top-down. It sets the coordinate space for everything you place on it.
 
-![A board photo loaded into the Board Image panel, before any connectors are added](../assets/workflow-1-image.png)
+![A board photo loaded into the Board Image panel, before any connectors are added](../assets/pinconnect/workflow-1-image.png)
 
 ### 2. Add connectors
 
@@ -48,7 +48,7 @@ Click **+ Add Connector** in the connector list or board panel (it becomes **Can
 
 Draw mode switches off after each connector, so click **+ Add Connector** again for the next.
 
-![The board with a labeled box drawn over each connector](../assets/workflow-2-connectors.png)
+![The board with a labeled box drawn over each connector](../assets/pinconnect/workflow-2-connectors.png)
 
 The **Connectors** tab shows each connector's name, type, pin count, and symbol when set. Click a row to select that connector on the board and in the editor. Drag its handle to reorder the list, or use **Move Up** and **Move Down** for the selected connector; this also sets connector order in the generated pinout. Each row has **Duplicate** and **Delete** buttons. A duplicate keeps the pins and settings, gets a unique ID and name, and appears slightly offset on the board so you can move it into place. Reordering, duplicating, and deleting all support Undo and Redo.
 
@@ -76,7 +76,7 @@ With a connector selected, the **Connector Editor** shows:
 
 The preview underneath is drawn by the generator, so it is exactly the shape the finished pinout will contain.
 
-![The Connector Editor showing the fields for the CAN connector, with a live preview of the MX-F-2R type below them](../assets/workflow-3-connector.png)
+![The Connector Editor showing the fields for the CAN connector, with a live preview of the MX-F-2R type below them](../assets/pinconnect/workflow-3-connector.png)
 
 ### 4. Edit the pins
 
@@ -91,13 +91,13 @@ The **Pins** section lists the connector's pins in order:
 
 Pin order in the list is the physical pin order in the output.
 
-![The Pins list for the CAN connector: a drag handle, color swatch, name field, and row selector for each pin](../assets/workflow-4-pins.png)
+![The Pins list for the CAN connector: a drag handle, color swatch, name field, and row selector for each pin](../assets/pinconnect/workflow-4-pins.png)
 
 ### 5. Add jumper settings (pin headers)
 
 A jumper header is read by position rather than by pin, so on the pin header types (`HDR-*`) the editor adds a **Jumper settings** section below the pins, and numbers each pin in the list: those are the numbers jumpers use. Each setting is one way of fitting the header's jumpers, and becomes a button in the generated pinout. The [board TOML reference](reference/board-toml.md#connectorsetting) shows how common headers map to settings, from an on/off jumper to a microstepping table.
 
-![The connector editor for a fan voltage selector in pick mode: the drawing with its pins numbered 1 to 6 and a jumper cap on pins 3 and 4, above three setting cards for 5V, 12V and VIN, with the 12V card active and its Pick button showing Done](../assets/workflow-jumpers.png)
+![The connector editor for a fan voltage selector in pick mode: the drawing with its pins numbered 1 to 6 and a jumper cap on pins 3 and 4, above three setting cards for 5V, 12V and VIN, with the 12V card active and its Pick button showing Done](../assets/pinconnect/workflow-jumpers.png)
 
 - **+ Add Setting** appends a setting, in the same group as the last one.
 - **Label** is the button's text, and **Group** makes settings into independent choices: settings with the same group are alternatives. Leave Group empty when the whole header is one choice.
@@ -118,13 +118,13 @@ Invalid or unfinished TOML keeps the source visible with an error and blocks vis
 
 Visual edits, from picking a theme or opening an image to changing a connector, its pins or its jumper settings, rewrite only the values that change, so everything else, comments included, stays as written. Reordering and duplicating preserve each connector block's comments, formatting, and pin and setting tables. Comments between connectors travel with the following connector, and comments above a pin or a jumper setting travel with it; comments at the end of the document stay there. Put a comment inside a connector's block or inline with one of its fields if it must always travel with that connector. Deleting a connector, a pin or a setting removes the comments above it too. Duplicating copies the block and updates the copy's identity and position.
 
-![The TOML Source pane showing the generated, syntax-highlighted config](../assets/workflow-5-toml.png)
+![The TOML Source pane showing the generated, syntax-highlighted config](../assets/pinconnect/workflow-5-toml.png)
 
 ### 7. Generate the pinout
 
 Click **Generate**. The dialog renders the pinout and shows the real page, not an approximation.
 
-![The Generate dialog showing a rendered pinout, with a theme selector, an embed toggle and a Download button](../assets/workflow-7-generate.png)
+![The Generate dialog showing a rendered pinout, with a theme selector, an embed toggle and a Download button](../assets/pinconnect/workflow-7-generate.png)
 
 - **Theme** sets the board's `theme`, the same setting as the toolbar's selector, and re-renders, so the page you download always matches the config you save. Undo takes a change back once the dialog is closed.
 - **Embed image** writes the board photo into the HTML. On, you get one self-contained file. Off, the file is far smaller but needs the photo beside it. The size beside the toggle is the size of what you are about to download.
@@ -140,7 +140,7 @@ The pinout you downloaded is finished and standalone, so this is not for it. It 
 
 If you close or reload the tab with changes you have not saved, the browser asks you to confirm first. It compares against the last config you saved or opened, so opening one and closing again straight away does not ask.
 
-![The toolbar, with the Save TOML button and the Generate button](../assets/workflow-6-save.png)
+![The toolbar, with the Save TOML button and the Generate button](../assets/pinconnect/workflow-6-save.png)
 
 ## Keyboard shortcuts
 
@@ -163,13 +163,15 @@ Use `Cmd` in place of `Ctrl` and `Option` in place of `Alt` on macOS. Undo and R
 
 The designer downloads its Python runtime from `cdn.jsdelivr.net` on first load. If that host is blocked by a network policy, an extension or an offline machine, nothing can render: **Generate** and **+ Add Connector** stay disabled and connectors show as "Unknown type" instead of drawings.
 
-Allow `cdn.jsdelivr.net`, or use the [command line tool](automating.md), which needs no network at all. Hover the message for the underlying error.
+Allow `cdn.jsdelivr.net`, or use the [command line tool](command-line.md), which needs no network at all. Hover the message for the underlying error.
+
+If you serve the designer folder yourself, the same message means its payload, `pinconnect.zip`, is missing from beside `index.html`. See [serving the designer by hand](command-line.md#serving-the-designer-by-hand).
 
 ### The connector types I need are missing
 
 The designer offers the connector types bundled with PinConnect. It cannot read a type you have written into a board's own `connector_dir`, because that folder is on your disk and the designer only has the config text.
 
-Such a board still renders, but **with the bundled definition of any type whose name it shares**, which is not what `pinout-gen` would produce. The Generate dialog says so when it happens. Render those boards with the command line tool, and see [connector types](reference/connector-types.md) for adding a type to the bundled library instead.
+Such a board still renders, but **with the bundled definition of any type whose name it shares**, which is not what `pinconnect` would produce. The Generate dialog says so when it happens. Render those boards with the command line tool, and see [connector types](reference/connector-types.md) for adding a type to the bundled library instead.
 
 The same applies to a theme in a board's own `theme_dir`.
 

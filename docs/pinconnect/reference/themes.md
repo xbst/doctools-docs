@@ -2,7 +2,7 @@
 
 A theme controls how a generated pinout looks and behaves **around** the connectors — colors, fonts, the connector list, symbols, and a few responsive behaviors. The connector diagrams and pin colors themselves are board data and stay the same across themes; a theme restyles the page, the tooltips, and the list.
 
-Themes are bundled with `pinout-gen` the same way connector types are, and you can add your own.
+Themes are bundled with `pinconnect` the same way connector types are, and you can add your own.
 
 ## Applying a theme
 
@@ -20,7 +20,7 @@ theme = "midnight"
 Or override it on the command line (this wins over the board's `theme`):
 
 ```bash
-pinout-gen board.toml --theme ocean
+pinconnect board.toml --theme ocean
 ```
 
 Precedence is **`--theme` → `[board] theme` → `default`**. A theme name is resolved from the board's `theme_dir` (default `./themes`, next to the config) first, then from the themes bundled with the package. An unknown name is an error naming both places it looked.
@@ -40,19 +40,9 @@ Every theme provides both a light and a dark palette. See [Light and dark mode](
 
 ## Light and dark mode
 
-The generated pinout has no light/dark control of its own — it takes the scheme from its surroundings. On load it decides like this:
+The generated pinout has no light/dark control of its own: it takes the scheme from its surroundings. In order, it follows a `?theme=dark` or `?theme=light` parameter, then the embedding page's scheme (same origin only, tracked live), then the reader's OS preference. A parent page on another origin sets it by posting `{ pinconnectTheme: "dark" }` to the iframe.
 
-1. **A `?theme=` parameter.** Opening `board.pinout.html?theme=dark` (or `?theme=light`) pins that scheme and stops the page from following its surroundings. Handy for linking straight to one, or for an iframe you always want dark.
-2. **The embedding page,** when the pinout is embedded from the same origin. It reads MkDocs Material / Zensical's `data-md-color-scheme` (where `slate` means dark), a generic `data-theme="dark"|"light"`, or a `dark` class on `<html>`/`<body>` — and keeps watching, so flipping your docs site's toggle re-colors the embedded pinout live. This needs same-origin access, so it does not apply across origins.
-3. **The reader's OS preference** (`prefers-color-scheme`), when neither applies.
-
-A parent page can also set the scheme at any time by posting to the iframe, which is how a **cross-origin** embed drives it:
-
-```js
-iframe.contentWindow.postMessage({ pinconnectTheme: "dark" }, "*");
-```
-
-Send `"light"` or `"dark"` to set the scheme — this takes effect immediately and overrides all of the above, including `?theme=`. Any other value clears the override and hands control back to the reader's OS preference.
+[Light and dark mode](../../guides/light-dark.md) explains each step and the message in full, and the [light and dark example](../examples/light-dark.md) shows it live.
 
 ## Theme gallery
 
@@ -62,13 +52,13 @@ The same board in each bundled theme, light and dark. Every shot has the connect
 
 | Light | Dark |
 |:-----:|:----:|
-| ![default theme, light mode](../../assets/theme-default-light.webp) | ![default theme, dark mode](../../assets/theme-default-dark.webp) |
+| ![default theme, light mode](../../assets/pinconnect/theme-default-light.webp) | ![default theme, dark mode](../../assets/pinconnect/theme-default-dark.webp) |
 
 ### `slate`
 
 | Light | Dark |
 |:-----:|:----:|
-| ![slate theme, light mode](../../assets/theme-slate-light.webp) | ![slate theme, dark mode](../../assets/theme-slate-dark.webp) |
+| ![slate theme, light mode](../../assets/pinconnect/theme-slate-light.webp) | ![slate theme, dark mode](../../assets/pinconnect/theme-slate-dark.webp) |
 
 ### `ocean`
 
@@ -76,19 +66,19 @@ Ocean sets `sidebar_stack_breakpoint = 6000`, so the connector list is stacked *
 
 | Light | Dark |
 |:-----:|:----:|
-| ![ocean theme, light mode](../../assets/theme-ocean-light.webp) | ![ocean theme, dark mode](../../assets/theme-ocean-dark.webp) |
+| ![ocean theme, light mode](../../assets/pinconnect/theme-ocean-light.webp) | ![ocean theme, dark mode](../../assets/pinconnect/theme-ocean-dark.webp) |
 
 ### `terminal`
 
 | Light | Dark |
 |:-----:|:----:|
-| ![terminal theme, light mode](../../assets/theme-terminal-light.webp) | ![terminal theme, dark mode](../../assets/theme-terminal-dark.webp) |
+| ![terminal theme, light mode](../../assets/pinconnect/theme-terminal-light.webp) | ![terminal theme, dark mode](../../assets/pinconnect/theme-terminal-dark.webp) |
 
 ### `midnight`
 
 | Light | Dark |
 |:-----:|:----:|
-| ![midnight theme, light mode](../../assets/theme-midnight-light.webp) | ![midnight theme, dark mode](../../assets/theme-midnight-dark.webp) |
+| ![midnight theme, light mode](../../assets/pinconnect/theme-midnight-light.webp) | ![midnight theme, dark mode](../../assets/pinconnect/theme-midnight-dark.webp) |
 
 ### `workbench`
 
@@ -96,7 +86,7 @@ Warm neutrals with an amber accent and Inter. This one demonstrates `tooltip_pla
 
 | Light | Dark |
 |:-----:|:----:|
-| ![workbench theme, light mode](../../assets/theme-workbench-light.webp) | ![workbench theme, dark mode](../../assets/theme-workbench-dark.webp) |
+| ![workbench theme, light mode](../../assets/pinconnect/theme-workbench-light.webp) | ![workbench theme, dark mode](../../assets/pinconnect/theme-workbench-dark.webp) |
 
 ## Anatomy of a theme file
 
@@ -148,7 +138,7 @@ The generated page declares a `color-scheme` to match the palette it is showing,
 
 Names outside this table are not rejected — they are emitted as CSS variables too. Defining `my-accent` in both palettes gives you `var(--my-accent)` to use from [`[extra_css]`](#extra_css), with light/dark switching handled for you.
 
-Values are checked as they load. A bare hex with no `#` (`bg = "f8f8f8"`) is not valid CSS — the browser drops the declaration that uses it and paints the element transparent instead — so `pinout-gen` adds the `#` for you and prints a warning. A value that is no recognizable color at all (a misspelled `gray`, say) is left alone but still warned about, since it would silently leave that element unstyled. Both are warnings, not errors: the page is still written. The designer shows the same warnings in its Generate dialog.
+Values are checked as they load. A bare hex with no `#` (`bg = "f8f8f8"`) is not valid CSS — the browser drops the declaration that uses it and paints the element transparent instead — so `pinconnect` adds the `#` for you and prints a warning. A value that is no recognizable color at all (a misspelled `gray`, say) is left alone but still warned about, since it would silently leave that element unstyled. Both are warnings, not errors: the page is still written. The designer shows the same warnings in its Generate dialog.
 
 Only the tokens in the table above are checked this way. A name outside it may legitimately hold any CSS your `[extra_css]` wants, so only the missing-`#` repair applies there.
 
@@ -211,9 +201,9 @@ font_scale               = 1.1
 
 > **Panel mode.** With `tooltip_placement = "panel"` there is no floating tooltip: a permanent box sits under the board, beside a full-height connector list on wide screens and between the board and the list when stacked. `hint_placement` has no effect in this mode, since the hint lives in the panel.
 
-> **Fullscreen.** The button beside the list toggle puts the pinout into the browser's fullscreen mode, so an embedded pinout gets the whole screen and, on a wide one, the side-by-side layout. Where element fullscreen is not available (iPhone Safari, or an embedding page whose iframe does not allow it; [pinout-embed](../embedding.md) does) it opens the pinout in a new tab instead, which also gives pinch-zoom on phones. The button is removed when neither can work, and `fullscreen_button = false` removes it always.
+> **Fullscreen.** The button beside the list toggle puts the pinout into the browser's fullscreen mode, so an embedded pinout gets the whole screen and, on a wide one, the side-by-side layout. Where element fullscreen is not available (iPhone Safari, or an embedding page whose iframe does not allow it; [md-iframe](../../md-iframe/embedding.md) does) it opens the pinout in a new tab instead, which also gives pinch-zoom on phones. The button is removed when neither can work, and `fullscreen_button = false` removes it always.
 
-> **Responsive stacking and embedding.** When the list stacks below the board, the pinout resizes itself to fit. If you embed it with [pinout-embed](../embedding.md), the iframe grows and shrinks to match — no fixed-height scrollbars. Use a recent `pinout-embed` build for this.
+> **Responsive stacking and embedding.** When the list stacks below the board, the pinout resizes itself to fit. If you embed it with [md-iframe](../../md-iframe/embedding.md), the iframe grows and shrinks to match — no fixed-height scrollbars. The page reports its height with the [auto-height protocol](../../md-iframe/auto-height.md), so other embedding code can do the same.
 
 ### `[extra_css]`
 
@@ -228,13 +218,13 @@ css = """
 
 ## Creating your own theme
 
-1. Copy [`default.toml`](../../pinout_gen/pinout_gen/themes/default.toml) (it documents every token) to `<name>.toml`, and uncomment/override what you want to change.
-2. Put it either in the **bundled themes** folder (`pinout_gen/pinout_gen/themes/`, shipped with the package) or in a **board-local** `theme_dir` next to your board config (handy for a project- or site-specific theme you don't want to bundle). A board-local theme of the same name overrides a bundled one.
+1. Copy [`default.toml`](https://github.com/xbst/PinConnect/blob/master/src/pinconnect/themes/default.toml) (it documents every token) to `<name>.toml`, and uncomment/override what you want to change.
+2. Put it either in the **bundled themes** folder (`src/pinconnect/themes/` in a clone of the repository, shipped with the package) or in a **board-local** `theme_dir` next to your board config (handy for a project- or site-specific theme you don't want to bundle). A board-local theme of the same name overrides a bundled one.
 3. Reference it with `theme = "<name>"` (or `--theme <name>`).
 
 A theme in the bundled folder appears in the designer's Theme selector straight away, with nothing to regenerate: the designer reads the same files the generator does.
 
-A board-local theme is a different matter. The designer has your config text but not your `theme_dir`, so it cannot load the theme, and it will render with the bundled theme of the same name or fall back to the default. It says so when that happens. Use the [command line](../automating.md) for those boards, or bundle the theme.
+A board-local theme is a different matter. The designer has your config text but not your `theme_dir`, so it cannot load the theme, and it will render with the bundled theme of the same name or fall back to the default. It says so when that happens. Use the [command line](../command-line.md) for those boards, or bundle the theme.
 
 ## Tips
 

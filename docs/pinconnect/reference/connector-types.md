@@ -2,7 +2,7 @@
 
 A connector type describes the *shape* of a physical connector — its pin pitch, body size, number of rows, and where the pin lines exit — independent of any board. Board connectors reference a type by name through their `type` field.
 
-Type definitions live in `pinout_gen/pinout_gen/connectors/`, one `.toml` file per type. The filename is the type name: `XH-F.toml` defines the `XH-F` type. When `pinout-gen` runs, it first checks the board's `connector_dir` (defaults to `./connectors` next to the board config), then falls back to the built-in types bundled with the package.
+Type definitions live in the package's [`src/pinconnect/connectors/`](https://github.com/xbst/PinConnect/tree/master/src/pinconnect/connectors) folder, one `.toml` file per type. The filename is the type name: `XH-F.toml` defines the `XH-F` type. When `pinconnect` runs, it first checks the board's `connector_dir` (defaults to `./connectors` next to the board config), then falls back to the built-in types bundled with the package.
 
 ## Built-in types
 
@@ -40,9 +40,9 @@ The `header-male` types are also the ones that take [jumper settings](board-toml
 
 Each type rendered, so you can pick one by its look:
 
-![The bundled connector types, each drawn with a few sample pins and labeled with its name and style](../../assets/connector-gallery.webp)
+![The bundled connector types, each drawn with a few sample pins and labeled with its name and style](../../assets/pinconnect/connector-gallery.webp)
 
-`none` is missing from that gallery on purpose, since it has nothing to draw.
+`none` is missing from that gallery on purpose, since it has nothing to draw. The [live connector gallery](../examples/connector-gallery.md) shows the same cards as a pinout: hover one to see the type with sample pin labels.
 
 ## Anatomy of a type file
 
@@ -73,7 +73,7 @@ That is `MX-F-2R.toml` verbatim. Copying a bundled type that resembles what you 
 ### `[connector]`
 
 - `name` — human-readable name for the connector family.
-- `default_pins` — optional list of the pins a new connector of this type starts with, written like a board's pins: `{ name = "GND", color = "#2C3E50", row = 1 }`, with `color` and `row` optional. It is what the designer's **New Connector** creates, in list order. Without it a new connector starts with one pin named `PIN1`. It does not change what `pinout-gen` draws, but the loader checks it on every run, so a malformed `default_pins` in a board's own connector type stops the command with an error. Only `name`, `color` and `row` are allowed; any other key, a `color` that is not a string, or a `row` beyond `rows` is rejected.
+- `default_pins` — optional list of the pins a new connector of this type starts with, written like a board's pins: `{ name = "GND", color = "#2C3E50", row = 1 }`, with `color` and `row` optional. It is what the designer's **New Connector** creates, in list order. Without it a new connector starts with one pin named `PIN1`. It does not change what `pinconnect` draws, but the loader checks it on every run, so a malformed `default_pins` in a board's own connector type stops the command with an error. Only `name`, `color` and `row` are allowed; any other key, a `color` that is not a string, or a `row` beyond `rows` is rejected.
 - `style` — how the body is drawn. One of:
   - `box` — a plain rectangle.
   - `latch` — a latching housing (JST XH / PH look).
@@ -156,9 +156,9 @@ There are two places a type can live, depending on whether it is just for your b
 
 **For one board (no changes to the package).** Create `<TYPE>.toml` in the board's `connector_dir` — `./connectors` next to the board config unless you set otherwise — and reference it with `type = "<TYPE>"`. That folder is searched first, so a file named after a bundled type also lets you override one locally.
 
-A board-local type is only visible to `pinout-gen`. The designer has your config text but not your folder, so it cannot offer the type, and if the name matches a bundled one it will quietly draw the bundled shape instead. It says so when that happens. Render those boards from the [command line](../automating.md).
+A board-local type is only visible to `pinconnect`. The designer has your config text but not your folder, so it cannot offer the type, and if the name matches a bundled one it will quietly draw the bundled shape instead. It says so when that happens. Render those boards from the [command line](../command-line.md).
 
-**For the shared library.** Create `pinout_gen/pinout_gen/connectors/<TYPE>.toml` instead. It is then available everywhere, the designer included, with nothing else to regenerate.
+**For the shared library.** Create `src/pinconnect/connectors/<TYPE>.toml` in a clone of the PinConnect repository instead. It is then available everywhere, the designer included, with nothing else to regenerate.
 
 Either way, copy an existing type with a similar body as a starting point, and iterate by generating a test board and eyeballing the result — a connector does not have to sit on a real board image while you tune geometry.
 
@@ -166,6 +166,6 @@ A new `style` cannot be added from a config file, because each one is custom dra
 
 ## The designer and the generator cannot drift
 
-Nothing needs regenerating after you add or edit a type. The designer loads the `pinout_gen` package into the browser and reads these TOML files through it, so the bundled library is the single source of truth for both.
+Nothing needs regenerating after you add or edit a type. The designer loads the `pinconnect` package into the browser and reads these TOML files through it, so the bundled library is the single source of truth for both.
 
 This was not always so: the designer used to carry a hand-written copy of the drawing code and JSON copies of every type, which had to be kept in step by hand. Both are gone.

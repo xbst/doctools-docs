@@ -13,20 +13,20 @@ The first load fetches a Python runtime of roughly 10 MB, which takes a few seco
 
 Go to **<https://pinconnect.isiks.tech>**. The generator runs in your browser, so your photo and your config never leave it.
 
-If you prefer to run it yourself, install the tool and use its serve mode instead:
+If you prefer to run it yourself, install the tool and run it with no arguments instead:
 
 ```bash
-pip install ./pinout_gen
-pinout-gen --serve
+pip install "git+https://github.com/xbst/PinConnect.git@master"
+pinconnect
 ```
 
-That builds what the designer needs, starts a local server, and opens a browser. See [Automating](automating.md) for the details.
+That builds what the designer needs, starts a local server, and opens a browser. See [Command line and CI](command-line.md) for the details.
 
 ## Step 2: Load your board photo
 
 Click **Open Image** and choose your photo. It sets the coordinate space for everything you place on top of it.
 
-![A board photo loaded into the Board Image panel, before any connectors are added](../assets/workflow-1-image.png)
+![A board photo loaded into the Board Image panel, before any connectors are added](../assets/pinconnect/workflow-1-image.png)
 
 ## Step 3: Draw a box over each connector
 
@@ -34,7 +34,7 @@ The **Connectors** tab is open on your first visit. Click **+ Add Connector** in
 
 Draw mode switches itself off after each connector, so click the button again for the next one.
 
-![The board with a labeled box drawn over each connector](../assets/workflow-2-connectors.png)
+![The board with a labeled box drawn over each connector](../assets/pinconnect/workflow-2-connectors.png)
 
 ## Step 4: Label the pins
 
@@ -44,7 +44,7 @@ Pin order in the list is the physical pin order in the output, so drag the handl
 
 You can also drag the handles in the **Connectors** list to set the order of connectors in the finished pinout. Use a row's **Duplicate** button to copy a connector with its pins, then move its box to the next matching connector on the board.
 
-![The Pins list for a connector: a drag handle, color swatch, name field, and row selector for each pin](../assets/workflow-4-pins.png)
+![The Pins list for a connector: a drag handle, color swatch, name field, and row selector for each pin](../assets/pinconnect/workflow-4-pins.png)
 
 [The designer](designer.md) covers every field in detail.
 
@@ -52,16 +52,16 @@ You can also drag the handles in the **Connectors** list to set the order of con
 
 Click **Generate**. The dialog renders your pinout and shows it exactly as it will look.
 
-![The Generate dialog showing a rendered pinout, with a theme selector, an embed toggle and a Download button](../assets/workflow-7-generate.png)
+![The Generate dialog showing a rendered pinout, with a theme selector, an embed toggle and a Download button](../assets/pinconnect/workflow-7-generate.png)
 
 Two controls are worth knowing:
 
 - **Theme** changes the colors, fonts and layout of the finished page. Six are built in. Switch between them to see the effect immediately, and read [Themes](reference/themes.md) to write your own.
 - **Embed image** decides whether the board photo is written into the HTML. Leave it on and you get one self-contained file that works anywhere. Turn it off and the file is much smaller, but the photo has to sit beside it.
 
-Click **Download** to save the page. Open it in a browser and you have this:
+Click **Download** to save the page. Open it in a browser and you have a page like this one, live here. Hover a connector on the board for its pinout, or open the connector list to browse every connector at once:
 
-![A generated PinConnect pinout: hovering a connector on the board shows its pinout, and the connector list browses every connector at once](../assets/pinout-demo.gif)
+![OwlFC-Mini interactive pinout](../pinouts/owlfc-mini/owlfc-mini.pinout.html){ type=iframe }
 
 ## Step 6: Save the config too
 
@@ -73,5 +73,6 @@ You don't need it for the pinout you just downloaded, but it makes editing pinou
 
 - [The designer](designer.md): every panel and field, plus what to do when something looks wrong.
 - [Concepts](concepts.md): what the config actually describes, and how connector types and themes are resolved.
-- [Automating](automating.md): regenerate pinouts from the command line, or from CI.
-- [Embedding](embedding.md): put the pinout into an MkDocs or Zensical page.
+- [Command line and CI](command-line.md): regenerate pinouts from the command line, or from CI.
+- [Embedding with md-iframe](../md-iframe/embedding.md): put the pinout into an MkDocs or Zensical page.
+- [Live examples](examples/index.md): more generated pinouts, embedded in this site.

@@ -1,6 +1,6 @@
 # Board TOML reference
 
-A board config describes one board: the image, its size, and every connector on it. The [designer](../designer.md) produces this file, and `pinout-gen` reads it. You can also write or edit it by hand.
+A board config describes one board: the image, its size, and every connector on it. The [designer](../designer.md) produces this file, and `pinconnect` reads it. You can also write or edit it by hand.
 
 A config has one `[board]` table followed by a `[[connector]]` array, and each connector holds a `[[connector.pin]]` array. A pin header can also hold a [`[[connector.setting]]`](#connectorsetting) array describing where its jumpers go. Example:
 
@@ -43,7 +43,7 @@ y2 = 742
 
 | Field | Required | Default | Meaning |
 |-------|----------|---------|---------|
-| `image` | yes | — | Path to the board image, relative to the config. By default referenced (not embedded) by the output, so keep it next to the generated HTML. Use `pinout-gen -i` to embed it instead. |
+| `image` | yes | — | Path to the board image, relative to the config. By default referenced (not embedded) by the output, so keep it next to the generated HTML. Use `pinconnect -i` to embed it instead. |
 | `width` | yes | — | Image width in pixels. |
 | `height` | yes | — | Image height in pixels. |
 | `title` | no | `"Pinout"` | Page title of the generated HTML (the browser tab) and the board image's alt text. Not drawn on the diagram itself. |
@@ -82,7 +82,7 @@ Controls how pin labels are spaced on horizontal (top/bottom) pinout sides. Has 
 
 The same 8-pin header under each style:
 
-![The same connector rendered with staggered, staircase, and flat label styles side by side](../../assets/label-styles.webp)
+![The same connector rendered with staggered, staircase, and flat label styles side by side](../../assets/pinconnect/label-styles.webp)
 
 ```toml
 [[connector]]
@@ -112,25 +112,25 @@ Names are matched case-insensitively, and surrounding whitespace is ignored.
 
 | Icon | Name | Aliases |
 |------|------|---------|
-| ![power icon](../../assets/symbols/power.svg) | `power` | — |
-| ![lightning icon](../../assets/symbols/lightning.svg) | `lightning` | `bolt`, `flash`, `zap` |
-| ![battery icon](../../assets/symbols/battery.svg) | `battery` | `batt` |
-| ![ground icon](../../assets/symbols/ground.svg) | `ground` | `earth`, `gnd` |
-| ![fuse icon](../../assets/symbols/fuse.svg) | `fuse` | — |
-| ![data icon](../../assets/symbols/data.svg) | `data` | `bus`, `can`, `i2c`, `spi`, `uart` |
-| ![signal icon](../../assets/symbols/signal.svg) | `signal` | — |
-| ![usb icon](../../assets/symbols/usb.svg) | `usb` | — |
-| ![fan icon](../../assets/symbols/fan.svg) | `fan` | — |
-| ![motor icon](../../assets/symbols/motor.svg) | `motor` | `servo`, `stepper` |
-| ![heater icon](../../assets/symbols/heater.svg) | `heater` | — |
-| ![fire icon](../../assets/symbols/fire.svg) | `fire` | `flame` |
-| ![temperature icon](../../assets/symbols/temperature.svg) | `temperature` | `temp`, `thermal`, `thermistor` |
-| ![led icon](../../assets/symbols/led.svg) | `led` | — |
-| ![button icon](../../assets/symbols/button.svg) | `button` | — |
-| ![switch icon](../../assets/symbols/switch.svg) | `switch` | — |
-| ![setting icon](../../assets/symbols/setting.svg) | `setting` | `config`, `dip`, `dipswitch`, `jumper`, `jumpers`, `settings` |
-| ![gear icon](../../assets/symbols/gear.svg) | `gear` | `cog`, `cogwheel` |
-| ![speaker icon](../../assets/symbols/speaker.svg) | `speaker` | `buzzer`, `spkr` |
+| ![power icon](../../assets/pinconnect/symbols/power.svg) | `power` | — |
+| ![lightning icon](../../assets/pinconnect/symbols/lightning.svg) | `lightning` | `bolt`, `flash`, `zap` |
+| ![battery icon](../../assets/pinconnect/symbols/battery.svg) | `battery` | `batt` |
+| ![ground icon](../../assets/pinconnect/symbols/ground.svg) | `ground` | `earth`, `gnd` |
+| ![fuse icon](../../assets/pinconnect/symbols/fuse.svg) | `fuse` | — |
+| ![data icon](../../assets/pinconnect/symbols/data.svg) | `data` | `bus`, `can`, `i2c`, `spi`, `uart` |
+| ![signal icon](../../assets/pinconnect/symbols/signal.svg) | `signal` | — |
+| ![usb icon](../../assets/pinconnect/symbols/usb.svg) | `usb` | — |
+| ![fan icon](../../assets/pinconnect/symbols/fan.svg) | `fan` | — |
+| ![motor icon](../../assets/pinconnect/symbols/motor.svg) | `motor` | `servo`, `stepper` |
+| ![heater icon](../../assets/pinconnect/symbols/heater.svg) | `heater` | — |
+| ![fire icon](../../assets/pinconnect/symbols/fire.svg) | `fire` | `flame` |
+| ![temperature icon](../../assets/pinconnect/symbols/temperature.svg) | `temperature` | `temp`, `thermal`, `thermistor` |
+| ![led icon](../../assets/pinconnect/symbols/led.svg) | `led` | — |
+| ![button icon](../../assets/pinconnect/symbols/button.svg) | `button` | — |
+| ![switch icon](../../assets/pinconnect/symbols/switch.svg) | `switch` | — |
+| ![setting icon](../../assets/pinconnect/symbols/setting.svg) | `setting` | `config`, `dip`, `dipswitch`, `jumper`, `jumpers`, `settings` |
+| ![gear icon](../../assets/pinconnect/symbols/gear.svg) | `gear` | `cog`, `cogwheel` |
+| ![speaker icon](../../assets/pinconnect/symbols/speaker.svg) | `speaker` | `buzzer`, `spkr` |
 
 Some icons are deliberate alternatives for the same idea — `lightning` for `power`, `fire` for `heater`, `gear` for `setting` — so pick whichever reads better on your board.
 
@@ -218,13 +218,13 @@ A jumper joins two pins that are next to each other: neighbors in the same row, 
 - The buttons respond once the tooltip is pinned by clicking or tapping the connector, like its close button. Hovering a button previews it, and clicking selects it.
 - The pins the shown jumpers bridge stay at full strength and the others fade, so the eye goes to the jumper position.
 - Every time a connector's pinout opens, it starts from the defaults again.
-- The jumper caps take the theme's [`jumper` and `jumper-stroke`](themes.md#colorslight--colorsdark) colors.
+- The jumper caps take the theme's [`jumper` and `jumper-stroke`](themes.md#colorslight-colorsdark) colors.
 
 ### Common shapes
 
-Every jumper header is one of a few shapes, or a mix of them. These six are drawn here with one setting chosen each. They are the six headers in [`tools/jumper-gallery/sample.toml`](../../tools/jumper-gallery/sample.toml), which you can open in the designer to see their settings, and the snippets below show their settings with the pins summarized in a comment.
+Every jumper header is one of a few shapes, or a mix of them. These six are drawn here with one setting chosen each. They are the six headers in [`jumpers.toml`](../../pinouts/jumpers/jumpers.toml), which you can open in the designer to see their settings, or try them live in the [jumper settings example](../examples/jumpers.md), and the snippets below show their settings with the pins summarized in a comment.
 
-![Six jumper headers in pinned tooltips: an on/off CAN termination jumper fitted, a boot mode selector in its DFU position, a fan voltage selector on 12V, microstepping with two jumpers for 1/8 step, data routing with two jumpers on USB, and a config header with three groups of buttons](../../assets/jumper-shapes.webp)
+![Six jumper headers in pinned tooltips: an on/off CAN termination jumper fitted, a boot mode selector in its DFU position, a fan voltage selector on 12V, microstepping with two jumpers for 1/8 step, data routing with two jumpers on USB, and a config header with three groups of buttons](../../assets/pinconnect/jumper-shapes.webp)
 
 #### On or off
 
@@ -352,7 +352,7 @@ Labels only need to be unique within a group, so both groups here could have an 
 
 ### Errors
 
-`pinout-gen` stops with one of these, naming the connector and the setting (and the setting's group, when it has one). The designer shows the same message in place of the connector's drawing.
+`pinconnect` stops with one of these, naming the connector and the setting (and the setting's group, when it has one). The designer shows the same message in place of the connector's drawing.
 
 | Message | What to change |
 |---------|----------------|
@@ -373,4 +373,4 @@ Labels only need to be unique within a group, so both groups here could have an 
 - Connectors that are not physically on the image (for testing a new type, say) still render — just give them a bounding box in an empty area.
 - A connector of type `none` draws nothing, so it needs no `[[connector.pin]]` entries at all — give it a name, a bounding box, and usually a `description`, and it becomes a labeled marker over that part of the image. Use it for anything with no pinout to show.
 - Comments use `#` and are ignored, so you can annotate the file freely.
-- If a `type` has no matching file in `connector_dir` *or* the built-in types, `pinout-gen` stops with a clear error naming the missing type and both folders it searched.
+- If a `type` has no matching file in `connector_dir` *or* the built-in types, `pinconnect` stops with a clear error naming the missing type and both folders it searched.
