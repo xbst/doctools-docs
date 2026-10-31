@@ -2,8 +2,8 @@
 #
 # The live jumper example on the docs site, the source of the jumper doc
 # images (tools/jumper-gallery/generate.py), and handy as a starting point:
-# open it in the designer to see each header's settings. jumpers.png is a
-# plain board drawn to this size; the image generator makes its own.
+# open it in the designer to see each header's settings. The same script
+# draws jumpers.png from it: a plain board with a header in each box.
 #
 # Jumpers name pins by their number in the pin list, counted from 1 in the
 # order the pins are written. The two-row headers below list their pins column

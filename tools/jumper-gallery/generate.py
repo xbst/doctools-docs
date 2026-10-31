@@ -8,7 +8,9 @@
                                     (docs/pinconnect/designer.md)
 
 Both come from docs/pinouts/jumpers/jumpers.toml, the sample the site's live
-jumper example also renders, so no board outside the repo is needed. The tooltips are the generator's real page, rendered with pinconnect and
+jumper example also renders, so no board outside the repo is needed. It also
+redraws docs/pinouts/jumpers/jumpers.png, the live example's board image: a
+plain board with a pin header drawn in each connector's box. The tooltips are the generator's real page, rendered with pinconnect and
 opened in the system Chrome; the designer shot drives the real designer.
 
 Run from the repository root:
@@ -189,7 +191,41 @@ def designer(browser):
         tmp.cleanup()
 
 
+def live_board():
+    """The live example's board image: a green board with a header in each box.
+
+    The docs images make their own plain board, so this one is free to look
+    like a real board without changing them.
+    """
+    from PIL import ImageDraw
+    board = load_board(SAMPLE)
+    types = load_all_connector_types(board, SAMPLE)
+    im = Image.new("RGBA", (board.width, board.height), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    d.rounded_rectangle((8, 8, board.width - 9, board.height - 9), radius=48,
+                        fill=(22, 64, 44, 255), outline=(52, 110, 78, 255), width=6)
+    for x, y in ((48, 48), (board.width - 49, 48), (48, board.height - 49),
+                 (board.width - 49, board.height - 49)):
+        d.ellipse((x - 20, y - 20, x + 20, y + 20), fill=(190, 160, 70, 255))
+        d.ellipse((x - 11, y - 11, x + 11, y + 11), fill=(0, 0, 0, 0))
+    for conn in board.connectors:
+        rows = max(1, types[conn.type].geometry.rows)
+        cols = -(-len(conn.pins) // rows)
+        x1, y1, x2, y2 = conn.x1 + 6, conn.y1 + 6, conn.x2 - 6, conn.y2 - 6
+        d.rectangle((x1, y1, x2, y2), fill=(24, 24, 24, 255), outline=(60, 60, 60, 255), width=2)
+        pw, ph = (x2 - x1) / cols, (y2 - y1) / rows
+        size = min(pw, ph) * 0.32
+        for r in range(rows):
+            for c in range(cols):
+                cx, cy = x1 + pw * (c + 0.5), y1 + ph * (r + 0.5)
+                d.rectangle((cx - size, cy - size, cx + size, cy + size), fill=(214, 178, 82, 255))
+    out = SAMPLE.with_name(board.image)
+    im.save(out, optimize=True)
+    print(f"  -> {out.relative_to(REPO)}  {im.size[0]}x{im.size[1]}  {out.stat().st_size // 1024}KB")
+
+
 def main():
+    live_board()
     with tempfile.TemporaryDirectory() as tmp, sync_playwright() as pw:
         browser = pw.chromium.launch(channel="chrome", headless=True)
         shapes(browser, Path(tmp))
