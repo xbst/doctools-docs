@@ -1,0 +1,22 @@
+# Generated live examples: built by CI (and locally by the same loop) from
+# the TOMLs in docs/pinouts/, which are the source of truth.
+docs/pinouts/**/*.pinout.html
+
+# Zensical build output and cache
+site/
+.cache/
+
+# Python build and cache artifacts
+__pycache__/
+*.egg-info/
+build/
+venv/
+
+# Plans, notes and local tests: local only, not committed
+/PLAN-*.md
+/KNOWN-BUGS*.md
+/tests/
+test_*.py
+
+# Local editor and agent settings
+.claude/

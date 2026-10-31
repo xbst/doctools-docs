@@ -1,0 +1,134 @@
+site_name: Isik's Tech Doc Tools
+site_url: https://doctools.isiks.tech
+site_description: Documentation for Isik's Tech's open-source documentation tools, PinConnect interactive pinouts and the md-iframe Markdown extension.
+site_author: XBST LLC
+copyright: Copyright &copy; 2026 XBST LLC
+repo_url: https://github.com/xbst
+repo_name: Isik's Tech GitHub
+
+theme:
+  name: material
+  logo: assets/isikstech_tp.png
+  favicon: assets/isikstech_tp.ico
+  icon:
+    repo: material/github
+    admonition:
+      warning: octicons/alert-16
+      note: octicons/tag-16
+      success: octicons/check-16
+      tip: octicons/squirrel-16
+      failure: octicons/x-circle-16
+      quote: octicons/quote-16
+
+  font:
+    text: Roboto
+    code: Roboto Mono
+  features:
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.path
+    - navigation.top
+    - navigation.indexes
+    - toc.follow
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+    - navigation.footer
+    - content.code.copy
+
+  palette:
+    # Dark Mode
+    - scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Dark mode
+      primary: amber
+      accent: amber
+
+    # Light Mode
+    - scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Light mode
+      primary: amber
+      accent: amber
+
+extra_css:
+  - assets/stylesheets/extra.css
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tilde
+  - pymdownx.superfences
+  - sane_lists
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:zensical.extensions.emoji.twemoji ""
+      emoji_generator: !!python/name:zensical.extensions.emoji.to_svg ""
+  - admonition
+  - pymdownx.details
+  - md_in_html
+  - tables
+  - md_iframe
+
+plugins:
+  - meta
+  - social:
+      cards_layout: isikstech
+
+extra:
+  generator: false
+  social:
+    - icon: material/youtube
+      link: https://www.youtube.com/c/isikstech
+      name: Isik's Tech YouTube Channel
+    - icon: material/twitter
+      link: https://twitter.com/IsiksTech
+      name: Isik's Tech Twitter Page
+    - icon: material/github
+      link: https://github.com/xbst
+      name: Isik's Tech Github Profile
+    - icon: simple/discord
+      name: Isik's Tech Discord Server
+      link: https://discord.gg/dNd5fB74J7
+    - icon: material/store
+      link: https://store.isiks.tech
+      name: Official Isik's Tech Store
+
+nav:
+  - index.md
+  - PinConnect:
+    - pinconnect/index.md
+    - "Getting started": pinconnect/getting-started.md
+    - "The designer": pinconnect/designer.md
+    - "Concepts": pinconnect/concepts.md
+    - "Command line and CI": pinconnect/command-line.md
+    - "Reference":
+      - "Board TOML": pinconnect/reference/board-toml.md
+      - "Connector types": pinconnect/reference/connector-types.md
+      - "Themes": pinconnect/reference/themes.md
+    - "Live examples":
+      - pinconnect/examples/index.md
+      - "A real board": pinconnect/examples/board.md
+      - "Connector gallery": pinconnect/examples/connector-gallery.md
+      - "Jumper settings": pinconnect/examples/jumpers.md
+      - "Light and dark": pinconnect/examples/light-dark.md
+    - "Open the designer": "https://pinconnect.isiks.tech"
+    - "GitHub Repository": "https://github.com/xbst/PinConnect"
+  - md-iframe:
+    - md-iframe/index.md
+    - "Embedding pages": md-iframe/embedding.md
+    - "Auto-height protocol": md-iframe/auto-height.md
+    - "GitHub Repository": "https://github.com/xbst/md-iframe"
+  - Guides:
+    - guides/index.md
+    - "Publish on a docs site": guides/publishing.md
+    - "Light and dark mode": guides/light-dark.md
+    - "Theming concepts": guides/theming.md
+  - "Migrating from the old names": migration.md
