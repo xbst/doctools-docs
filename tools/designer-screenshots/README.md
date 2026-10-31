@@ -1,8 +1,8 @@
 # Designer screenshots
 
-Regenerates the nine screenshots of the designer used in [designer.md](../../docs/designer.md) and [getting-started.md](../../docs/getting-started.md): `designer-overview.png`, `designer-about.png`, and `workflow-1..7-*.png`.
+Regenerates the nine screenshots of the designer used in [the designer](../../docs/pinconnect/designer.md) and [getting started](../../docs/pinconnect/getting-started.md) pages, in `docs/assets/pinconnect/`: `designer-overview.png`, `designer-about.png`, and `workflow-1..7-*.png`.
 
-The script serves `src/pinconnect/designer/` locally on a free port, then Playwright drives the real UI in the system Chrome, loads a sample board (image, then TOML), selects a connector, opens the Generate dialog and the About box, and captures each panel. The maintainer's sample selects a two-row connector so the preview and R1/R2 pin selectors are visible. Shots are dark at 2x, matching the designer's fixed dark theme. The overview uses the **Connectors** tab; only the TOML source shot switches to **TOML**, then restores **Connectors** for the remaining shots.
+The script serves a temporary copy of the installed `pinconnect` designer locally on a free port, then Playwright drives the real UI in the system Chrome, loads a sample board (image, then TOML), selects a connector, opens the Generate dialog and the About box, and captures each panel. The maintainer's sample selects a two-row connector so the preview and R1/R2 pin selectors are visible. Shots are dark at 2x, matching the designer's fixed dark theme. The overview uses the **Connectors** tab; only the TOML source shot switches to **TOML**, then restores **Connectors** for the remaining shots.
 
 Run from the repository root after a change to the designer's chrome (fonts, layout, panel markup):
 
