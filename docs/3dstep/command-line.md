@@ -170,6 +170,13 @@ The options are the import dialog's:
 | `--deflection MM`, `--angle DEG` | | Instead of a preset: the largest distance between a surface and its triangles, in millimeters, and the largest angle between neighboring triangles, in degrees. |
 | `--min-size MM` | `0` | Drop bodies whose bounding-box diagonal is smaller. Parts keep the same ids whatever the filter. |
 | `--merge-bodies` / `--no-merge-bodies` | merged | One part per component, its bodies merged, or one part per body. |
+| `--id-prefix PREFIX` | | Put `PREFIX` in front of every id: `--id-prefix tq2_pi4_` makes `bolt` `tq2_pi4_bolt`. It must start with a letter, a digit or `_`, and hold only letters, digits, `_`, `.` and `-`. |
+
+The designer prefixes the ids of a model whose ids another model of the project already uses, with the model's file name and `_` (see [Import a model](designer.md#1-import-a-model)). To regenerate such a model's GLB, pass the same prefix:
+
+```bash
+3dstep tq2-pi4.step --id-prefix tq2_pi4_
+```
 
 The command line and the designer read a STEP file the same way: the same tree of groups and parts, the same ids, names and colors, so a project written in the designer works with either GLB. The triangles differ, though. The designer's reader is built on OpenCascade 7.6 and the extra on 8.0, whose meshers do not always split a curved face the same way: the example above has 34,691 triangles imported in the designer and 35,011 converted here. The same converter on Linux and on Windows can split a few faces differently too. Commit the GLB the designer wrote where you want the same file every time, and convert in pipelines that regenerate GLBs from STEP files.
 

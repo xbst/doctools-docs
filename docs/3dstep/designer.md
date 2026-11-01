@@ -70,10 +70,12 @@ The table lists every component with several bodies. A merged component is one p
 
 **Add to project** adds the model. The first model also names an untitled project after its file, sets the project's up axis, and adds a first step.
 
+A model whose ids another model of the project already uses gets its file name in front of every id, so the page can tell the two apart: import `dm1-id-214.glb` twice and the second copy, `dm1_id_214_2.glb`, has `dm1_id_214_2_bolt` where the first has `bolt`. The dialog says so before you add it, naming a few of the shared ids and the model that has them. Every id of the model gets the prefix, or none does, and undoing the import takes it back. To convert the same STEP file on a machine later, give [`3dstep model.step`](command-line.md#convert-a-step-file) the same prefix with `--id-prefix`.
+
 A GLB written by 3DStep is used as it is. A GLB from another tool asks for its **Unit** (millimeters, meters or inches; glTF's own unit is meters) and **Up axis** (Y, glTF's convention, or Z), and is converted to millimeters and the project's axes.
 
 !!! note "Large STEP files"
-    The browser's STEP reader has a memory limit of 2 GB, which a STEP file of about 45 MB or more fills while reading. The import then stops with an out-of-memory message, and the designer keeps working. Export the assembly as several STEP files, one model each, in their assembled positions and each with its own top-level assembly name, and import them one after another. Or convert the file with [`3dstep model.step`](command-line.md#convert-a-step-file), which has no such limit, and import the GLB it writes.
+    The browser's STEP reader has a memory limit of 2 GB, which a STEP file of about 45 MB or more fills while reading. The import then stops with an out-of-memory message, and the designer keeps working. Export the assembly as several STEP files, one model each, in their assembled positions, and import them one after another. Give each file its own top-level assembly name to keep its ids short: a file with an id that an earlier one already uses gets all of its ids prefixed. Or convert the file with [`3dstep model.step`](command-line.md#convert-a-step-file), which has no such limit, and import the GLB it writes.
 
 ### 2. Trim the model in the Parts tab
 
@@ -245,7 +247,7 @@ The designer offers the themes bundled with 3DStep. It cannot read a theme in a 
 
 ### The status bar says two models share an id
 
-Ids are made from the names in the CAD file, one model at a time, so two models whose parts have the same names get the same ids, and the page cannot tell those parts apart. This happens most with an assembly split into several STEP files whose top-level assemblies have the same name. Give each file its own top-level assembly name in your CAD tool before exporting.
+The page cannot tell apart the parts of two models that share an id. The designer prevents it when you import a model, by [prefixing its ids](#1-import-a-model), but opening a project renames nothing: the warning means the project's GLB files already shared ids when you opened them, or a GLB was converted again with [`3dstep model.step`](command-line.md#convert-a-step-file) without the `--id-prefix` the designer gave it. Convert one of the two models again with `--id-prefix` and add the same prefix to the ids the project names from it, or import it again in the designer, which prefixes the new copy's ids, and point the steps at those.
 
 ### A model added later lies on its side
 

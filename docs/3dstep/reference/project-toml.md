@@ -172,6 +172,8 @@ An arrow or label attached to a part that is hidden in its step is hidden with i
 
 An id names a node of a model: a part or a group. Ids are made from the names in the CAD file when a model is imported, as [Concepts](../concepts.md#models-parts-and-ids) describes, and are the node names in the GLB file. The Parts tab of the designer shows each part's id beside its name.
 
+Each id should name one node of the whole project. A model whose ids another model already uses gets its file name in front of all of them when the designer imports it (`tq2_pi4_bolt` in `tq2_pi4.glb`); models that share ids anyway, opened together, get a warning.
+
 In a project file an id is letters, digits, `_`, `.` and `-`, not starting with `.` or `-`. Every id a project names must exist in one of its models; a misspelled one is an error that lists the nearest ids.
 
 ## Coordinates

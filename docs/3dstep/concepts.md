@@ -28,7 +28,7 @@ Inside a model is the assembly's tree, as the CAD file has it. A **part** is a n
 
 Every node has an **id**, made from its name in the CAD file: accents and other non-ASCII characters are dropped, letters are lowercased, and every run of other characters becomes `_`, so `M3 x 8 Screw` becomes `m3_x_8_screw`. Names that repeat get `_2`, `_3` and so on, in the order the file lists them. Ids never change after the import: renaming a part in the designer changes its display name, not its id, so every step that names it keeps working. Ids are what you write in the [project file](reference/project-toml.md).
 
-Ids are made one model at a time, so two models whose parts have the same names share ids, and the page cannot tell those parts apart. Give each STEP file its own top-level assembly name.
+Ids are made one model at a time, so two models can have parts with the same names: the screws of an assembly exported as several STEP files, say, or one file imported twice. The page has to tell every part apart, so when you add a model whose ids another model of the project already uses, the designer puts the new model's file name in front of all of its ids: in `tq2_pi4.glb`, `bolt` becomes `tq2_pi4_bolt`. It prefixes every id of that model or none, and the import dialog says so before you add it. Opening a project renames nothing.
 
 **Units and axes** are the CAD file's own: millimeters, and the axes your CAD tool shows, with `up` saying which one points up (Z in most CAD tools, Y in Fusion). Every coordinate you see in the project file, the designer and your CAD tool is the same number. Nothing is scaled or turned to suit a 3D format.
 
