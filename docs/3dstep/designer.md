@@ -169,7 +169,7 @@ With parts selected, it shows their **Id** (fixed), their name in the CAD file, 
 
 With an arrow selected, it edits its **Kind** (straight, or rotate around an axis), its two points (**From** and **To**, or **Center** and **Axis to**), the rotate arrow's **Turns** and **Radius**, a **Color**, a **Label** at its tail and the part it is **Attached** to. A label has its **Text**, **Anchor**, **Side** and attachment. **Pick** beside a point takes it from a click in the viewport. Unchecking **Attached** converts the points to model coordinates, and checking it again converts them back, so nothing moves on screen. **Step** returns to the step.
 
-A rotate arrow placed with the tool turns counterclockwise as you look at the surface you clicked, the way a screw comes out. To show one going in, make its **Turns** negative; [`turns`](reference/project-toml.md#steparrow) explains the rule.
+A rotate arrow placed with the tool turns clockwise as you look at the surface you clicked, the way a screw goes in: its **Axis to** point is inside the part. To show one coming out, make its **Turns** negative; [`turns`](reference/project-toml.md#steparrow) explains the rule.
 
 ### 6. Edit the TOML directly (optional)
 

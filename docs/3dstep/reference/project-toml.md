@@ -151,7 +151,7 @@ An arrow of the step's own. Optional, any number.
 | `label` | no | `""` | Short text at the tail. |
 | `attach` | no | `""` | An id: `from` and `to` are in that part's frame, and the arrow moves with the part. See [Coordinates](#coordinates). |
 
-To show a screw being tightened, put `from` at the screw's head and `to` further along the screw, into the part: positive turns then sweep clockwise as you look at the head. The designer's Rotate arrow tool puts `to` on the outward side of the surface you click instead, so its arrows turn the other way until you make `turns` negative.
+To show a screw being tightened, put `from` at the screw's head and `to` further along the screw, into the part: positive turns then sweep clockwise as you look at the head. The designer's Rotate arrow tool places its arrows this way, with `to` inside the part you click; make `turns` negative to show a screw coming out.
 
 Arrows are sized from the model, and a theme can scale them with `arrow_scale`. A straight arrow shorter than its head is not drawn.
 
