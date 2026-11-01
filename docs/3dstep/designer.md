@@ -75,7 +75,7 @@ A model whose ids another model of the project already uses gets its file name i
 A GLB written by 3DStep is used as it is when it is a project's first model. A later one shows its **Up axis**, as the file records it, beside the project's, and is rotated to the project's axis when the two differ. A GLB that [`3dstep model.step`](command-line.md#convert-a-step-file) converted always says Z, whatever its CAD file had up: for one from Fusion, choose **Y**. A GLB from another tool asks for its **Unit** (millimeters, meters or inches; glTF's own unit is meters) and **Up axis** (Y, glTF's convention, or Z), and is converted to millimeters and the project's axes.
 
 !!! note "Large STEP files"
-    The browser's STEP reader has a memory limit of 2 GB, which a STEP file of about 45 MB or more fills while reading. The import then stops with an out-of-memory message, and the designer keeps working. Export the assembly as several STEP files, one model each, in their assembled positions, and import them one after another. Give each file its own top-level assembly name to keep its ids short: a file with an id that an earlier one already uses gets all of its ids prefixed. Or convert the file with [`3dstep model.step`](command-line.md#convert-a-step-file), which has no such limit, and import the GLB it writes.
+    The browser's STEP reader has a memory limit of 2 GB, which a STEP file of about 45 MB or more fills while reading. The import then stops with an out-of-memory message, and the designer keeps working. Split the assembly into several STEP files with [`3dstep split`](command-line.md#split-a-big-assembly), which puts each top-level component where the assembly has it and gives each file its own top-level assembly name, and import them one after another: each becomes a model, and they line up as in the assembly. Exporting several STEP files from your CAD tool works too, one model each, in their assembled positions. Give each file its own top-level assembly name to keep its ids short: a file with an id that an earlier one already uses gets all of its ids prefixed. Or convert the file with [`3dstep model.step`](command-line.md#convert-a-step-file), which has no such limit, and import the GLB it writes.
 
 ### 2. Trim the model in the Parts tab
 
@@ -239,7 +239,7 @@ If you serve the designer folder yourself, the same message means its payload, `
 
 ### The import runs out of memory
 
-A STEP file of about 45 MB or more fills the browser reader's 2 GB of memory. Split the assembly into several STEP files in your CAD tool, or convert it on a machine with [`3dstep model.step`](command-line.md#convert-a-step-file); see [Import a model](#1-import-a-model).
+A STEP file of about 45 MB or more fills the browser reader's 2 GB of memory. Split the assembly into several STEP files with [`3dstep split`](command-line.md#split-a-big-assembly) or in your CAD tool and import them one after another, or convert it on a machine with [`3dstep model.step`](command-line.md#convert-a-step-file); see [Import a model](#1-import-a-model).
 
 ### My theme is missing
 

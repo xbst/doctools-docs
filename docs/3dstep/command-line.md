@@ -1,5 +1,5 @@
 ---
-description: "Install the 3dstep command, render pages from a project, convert STEP files to GLB on a machine, run the designer locally, and serve it by hand."
+description: "Install the 3dstep command, render pages from a project, convert STEP files to GLB on a machine, split assemblies too big for the designer, run the designer locally, and serve it by hand."
 ---
 # Command line and CI
 
@@ -43,7 +43,7 @@ Check it worked:
 
 Installing from `master` means each install picks up the newest renderer, so regenerated pages carry the latest fixes. That is what a CI job wants; see [Publish on a docs site](../guides/publishing.md).
 
-Converting STEP files on a machine needs an optional extra; see [Convert a STEP file](#convert-a-step-file).
+Converting and splitting STEP files on a machine need an optional extra; see [Convert a STEP file](#convert-a-step-file).
 
 ### From a clone
 
@@ -141,7 +141,7 @@ The bundled themes are `default`, `midnight`, `slate` and `workbench`.
 
 ## Convert a STEP file
 
-`3dstep model.step` turns a STEP file into a GLB on your machine, the same model the designer's import makes. It is for pipelines that keep only the STEP file in the repository, and for files too big for the designer: the browser's STEP reader stops at 2 GB of memory, which a STEP file of about 45 MB fills, and the command line has no such limit.
+`3dstep model.step` turns a STEP file into a GLB on your machine, the same model the designer's import makes. It is for pipelines that keep only the STEP file in the repository, and for files too big for the designer: the browser's STEP reader stops at 2 GB of memory, which a STEP file of about 45 MB fills, and the command line has no such limit. To import such a file in the designer instead, [split it](#split-a-big-assembly).
 
 It needs an optional extra, the Python bindings of OpenCascade, which have wheels for Python 3.11 and newer on Windows, Linux and macOS (about 50 to 70 MB to download):
 
@@ -184,6 +184,76 @@ The converter does not simplify. To get a big model under the [size guidance](co
 
 The converter keeps the STEP file's axes, and the GLB always records Z as its up axis: it cannot know which axis the CAD tool had up. A model from a Y-up CAD tool such as Fusion needs `up = "y"` in its project's `[assembly]`, and when you add its GLB to a project in the designer, choose **Y** as its up axis in the import dialog. The designer rotates a model added to a project with the other up axis (see [Import a model](designer.md#1-import-a-model)); the converter never does, so it cannot regenerate such a model's GLB: commit the GLB the designer wrote for it.
 
+## Split a big assembly
+
+The designer's STEP reader stops at 2 GB of memory, which a STEP file of about 45 MB fills while reading. `3dstep split` cuts such an assembly into several smaller STEP files by its top-level components. Each file is one assembly that holds some of the components, each where the original assembly has it and with its names and colors, so the designer imports the files one after another as models of one project that line up. It needs the same extra as [converting](#convert-a-step-file).
+
+Start by listing the top-level components, to see what there is to split:
+
+```bash
+3dstep split "TQ2-on-Pi.step" --list
+```
+
+```
+TQ2-on-Pi.step: assembly 'TQ2 on Pi', 20 top-level components of 8 products
+instances  bodies  product
+        1     650  Assembly Raspberry Pi 4 Model B step
+        4       8  M3x20 Standoff v1
+        1     803  TQ2-T5
+        1       4  3010 Axial Fan
+        4       4  M2.5 Threaded Insert
+        4       4  M2.5x6 BHCS
+        4       4  M2.5x16 BHCS
+        1      53  TQ2-USB
+```
+
+A product is a part or a sub-assembly of the CAD file, and each place the assembly uses it is an instance. The body counts show where the size is: in this ToqueCAN 2 on a Raspberry Pi, a 71.5 MB file, the Pi and the TQ2-T5 board hold most of the 1,530 bodies. A file of several top-level shapes with no assembly around them lists the shapes instead.
+
+Without a spec, `3dstep split` writes one file per product, named after it (`tq2_t5.step`, `m2_5_threaded_insert.step`, …), beside the assembly. A spec groups the components into the files you want instead. It is TOML, with one `[[file]]` table per file:
+
+```toml
+[[file]]
+name = "tq2-pi4.step"
+assembly = "TQ2 Pi 4"
+take = ["Assembly Raspberry Pi 4 Model B step"]
+
+[[file]]
+name = "tq2-board.step"
+assembly = "TQ2 board"
+take = ["TQ2-T5"]
+
+[[file]]
+name = "tq2-hardware.step"
+assembly = "TQ2 hardware"
+take = ["*"]
+```
+
+```bash
+3dstep split "TQ2-on-Pi.step" --spec tq2-split.toml
+```
+
+```
+Wrote /path/to/tq2-pi4.step  (TQ2 Pi 4: 1 component, 20.57 MB)
+Wrote /path/to/tq2-board.step  (TQ2 board: 1 component, 43.59 MB)
+Wrote /path/to/tq2-hardware.step  (TQ2 hardware: 18 components, 7.62 MB)
+```
+
+| Key | Required | Meaning |
+|---|---|---|
+| `name` | yes | The STEP file to write: a file name ending in `.step` or `.stp`, without a folder. Two files cannot have the same name. |
+| `assembly` | yes | The name of the assembly in the file. The designer names the model's top group after it and builds the ids from it, so each file needs its own. |
+| `take` | yes | The products the file holds, as `--list` names them: every instance of each. `"*"` takes every product no other file names, in one file at most. A product goes in one file only. |
+
+A product that no file takes is left out of the split, with a warning. The spec's mistakes are errors named like the project file's, such as `tq2-split.toml: [[file]] #2: take: 'TQ2 T5' is not a top-level component (nearest: TQ2-T5)`, and nothing is written.
+
+| Option | Default | Meaning |
+|---|---|---|
+| `--list` | | Print the top-level components, in the file's order, and write nothing. |
+| `--spec SPLIT.toml` | a file per product | Which components go into which file. |
+| `-o OUT_DIR` | the assembly's folder | The folder to write the files in, made if it is missing. A file that would replace the assembly itself is refused. |
+
+The ToqueCAN 2 split takes about 30 seconds, and the designer then reads the three files in a minute or two. Import them one after another: each becomes a model of the project, and they sit together as in the assembly. The edges are written without their 2D curves, which OpenCascade computes again when it reads a file, so together the files are about the size of the original. One product too big on its own, such as a board with every component modeled, stays too big after the split: drop detail from it in your CAD tool, or convert it with [`3dstep model.step`](#convert-a-step-file) and import the GLB.
+
 ## Regenerating as an assembly changes
 
 The project and its models are the things worth keeping in version control. A page is derived from them, so an assembly revision means editing the project, or importing the new STEP file over the old model, and running the command again rather than starting over:
@@ -204,14 +274,16 @@ All of these print to stderr and exit with status 1.
 - **`Error: model file not found`**: a GLB the project names in `[assembly] models` is not beside it. The message says which project names it.
 - **`Error: … unknown id '<id>' (nearest: …)`**: a step names a part no model has, usually after a model was imported again with other names. The message says where, and lists the nearest ids.
 - **`Error: Theme '<name>' not found`**: no `<name>.toml` in either `theme_dir` or the bundled themes. The message names both folders. See [Themes](reference/themes.md).
-- **`Error: the output would overwrite …`** and **`Error: the output is a folder, not a file`**: `-o` names one of the inputs, or a folder.
+- **`Error: the output would overwrite …`** and **`Error: the output is a folder, not a file`**: `-o` names one of the inputs, or a folder. For `3dstep split`, **`Error: the output is a file, not a folder`**: its `-o` names a file.
 - **`Error: cannot write output file`**: the `-o` folder does not exist, or the file cannot be written there.
-- **`Error: STEP conversion needs the optional dependency`**: install the `step` extra, as above.
+- **`Error: STEP conversion needs the optional dependency`** and **`Error: Splitting a STEP file needs the optional dependency`**: install the `step` extra, as above.
 - **`Error: … could not be read as a STEP file`**: OpenCascade could not read it. The message quotes its last messages.
 - **`Error: … has no bodies of N mm or larger; lower the size filter`**: `--min-size` dropped everything.
-- **`Error: out of memory while converting …`**: use `--quality coarse`, or split the assembly into smaller STEP files.
+- **`Error: out of memory while converting …`**: use `--quality coarse`, or split the assembly into smaller STEP files with [`3dstep split`](#split-a-big-assembly).
+- **`Error: <spec>: [[file]] #N: …`**: a problem in a split spec, such as an unknown or missing key, a product that is not a top-level component, a product two files take, or two files with one name or one assembly name. The message lists the nearest product names.
+- **`Error: … has no components to split: it holds one part`**: the STEP file is a single part.
 - **`Error: port must be between 0 and 65535`**: an out-of-range `--port`.
 
 A malformed project reports the specific problem with the file, the table and the key, such as a TOML syntax error, an unknown key, a missing required key or a value of the wrong type, rather than a traceback. See [Project TOML](reference/project-toml.md#checks). Problems the page renders with anyway, such as a highlight on a part hidden in that step, print as `Warning:` lines, and the page is still written.
 
-Mixing the modes is a usage error with status 2: `--port` and `--no-browser` apply only to the designer, `-t` only to rendering a project, and the convert options only to converting a STEP file. `--quality` is a preset for `--deflection` and `--angle`, so give one or the other.
+Mixing the modes is a usage error with status 2: `--port` and `--no-browser` apply only to the designer, `-t` only to rendering a project, and the convert options only to converting a STEP file. `--quality` is a preset for `--deflection` and `--angle`, so give one or the other. `3dstep split` takes only its own options, and `--list` writes nothing, so it takes neither `-o` nor `--spec`.
