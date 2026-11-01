@@ -201,6 +201,8 @@ Click **Save project** (`Ctrl+S`). It saves the project file, `<name>.toml`, the
 
 **Open project** takes the TOML and its GLB files together, chosen at once or dropped on the viewport together. A project whose models are not all loaded shows a banner naming them, with a button to open each of the first three.
 
+Each GLB file is matched to the name the project gives it, in any case: `DM1-ID-214.glb` opens as `dm1-id-214.glb` when that is the project's name for it, as the `3dstep` command finds it on Windows and macOS. The project keeps its own spelling, and the status bar names the file opened under another one; see [a file opened as another name](#the-status-bar-says-a-file-was-opened-as-another-name).
+
 If you close or reload the tab with changes you have not saved, the browser asks you to confirm first.
 
 ## Keyboard shortcuts
@@ -244,6 +246,10 @@ A STEP file of about 45 MB or more fills the browser reader's 2 GB of memory. Sp
 ### My theme is missing
 
 The designer offers the themes bundled with 3DStep. It cannot read a theme in a project's own `theme_dir`, because that folder is on your disk and the designer only has the project file. Such a project previews with the default look, and the status bar reports the theme: as an error when the theme is meant to be in `./themes`, the default `theme_dir`, and as a warning with another folder. **Generate** says it cannot use the theme. Picking a bundled theme in the Generate dialog renders the page with it, but that sets the project's `theme` too, as the toolbar's selector does: undo it before you save, or the project loses its own theme's name. Render the project with the [command line tool](command-line.md) to get the page in its own theme. A docs site's own theme, like the one on this site, works this way.
+
+### The status bar says a file was opened as another name
+
+Open matches a GLB file to the name the project gives it in any case, so `dm1-id-214.glb` opens for a project naming `DM1-ID-214.glb`. The project keeps its own spelling, and the status bar says "dm1-id-214.glb opened as DM1-ID-214.glb"; hover it for the details. The `3dstep` command finds that file under the project's spelling on Windows and macOS, whose file systems ignore case, but not on Linux, which is what most CI runners use: rename the file to match. A model opened with the banner's button under another name altogether is named the same way.
 
 ### The status bar says two models share an id
 
