@@ -1,5 +1,5 @@
 ---
-description: "Open-source documentation tools from Isik's Tech: PinConnect turns a board photo into an interactive pinout, and md-iframe embeds pages like it in MkDocs and Zensical sites."
+description: "Open-source documentation tools from Isik's Tech: PinConnect turns a board photo into an interactive pinout, 3DStep turns a CAD assembly into interactive 3D assembly instructions, and md-iframe embeds pages like them in MkDocs and Zensical sites."
 hide:
   - footer
   - toc
@@ -29,7 +29,24 @@ Open-source tools for writing better hardware documentation. Initially built for
     
     [Documentation](pinconnect){ .md-button .md-button--primary } [Repo](https://github.com/xbst/PinConnect){ .md-button }
 
-<!--- 3DStep goes here --->
+-    ## 3DStep
+    ---
+
+    3DStep turns a CAD assembly into step-by-step interactive 3D assembly instructions: each step shows the parts it installs, moves them into place with arrows, and frames them from a good angle, and the reader can turn the model to look closer. Build them in the browser from a STEP file at [3dstep.isiks.tech](https://3dstep.isiks.tech), or render them from a project file on the command line.
+
+    === "Animated demo"
+        ![A generated 3DStep page: stepping through the PiCAN 2 going into its shell, each part moving into place, and the view turned to look closer](assets/3dstep/3dstep-demo.gif)
+
+        *Assembly instructions for a PiCAN 2 USB to CAN adapter going into its printed shell — press Next and each part moves into place, or turn the model to look closer.*
+
+    === "Interactive viewer"
+        ![Put the PiCAN 2 in its shell: interactive 3D assembly instructions](3d/pican2/pican2.3dstep.html){ type=iframe }
+
+        *Above page was generated with 3DStep using a custom theme that matches this site, embedded with [md-iframe](#md-iframe).*
+
+    ---
+
+    [Documentation](3dstep){ .md-button .md-button--primary } [Repo](https://github.com/xbst/3DStep){ .md-button }
 
 -     ##md-iframe
     ---
@@ -45,4 +62,4 @@ Open-source tools for writing better hardware documentation. Initially built for
 
 ## License
 
-PinConnect and md-iframe are licensed under GPL-3.0. Their source is on GitHub: [xbst/PinConnect](https://github.com/xbst/PinConnect) and [xbst/md-iframe](https://github.com/xbst/md-iframe).
+PinConnect, 3DStep and md-iframe are licensed under GPL-3.0. Their source is on GitHub: [xbst/PinConnect](https://github.com/xbst/PinConnect), [xbst/3DStep](https://github.com/xbst/3DStep) and [xbst/md-iframe](https://github.com/xbst/md-iframe).

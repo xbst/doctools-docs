@@ -66,7 +66,7 @@ Remember to copy the board image next to it, or use `-i` to embed the image into
 
 Most embedded pages render at a fixed height (your `style`, or the `min-height:60vh` default), which is what you want for a diagram that fills its frame.
 
-A page can also report its content height, and md-iframe then grows or shrinks the iframe to fit, with no scrollbar inside it. PinConnect pinouts do this when their theme stacks the connector list below the board on narrow screens. md-iframe adds one small listener per page that has an embed; there is nothing to configure. A page that never reports a height keeps the authored `(min-)height`.
+A page can also report its content height, and md-iframe then grows or shrinks the iframe to fit, with no scrollbar inside it. PinConnect pinouts do this when their theme stacks the connector list below the board on narrow screens, and [3DStep](../3dstep/index.md) pages always do. md-iframe adds one small listener per page that has an embed; there is nothing to configure. A page that never reports a height keeps the authored `(min-)height`.
 
 [Auto-height protocol](auto-height.md) describes the message, so other tools and hand-written pages can use it too.
 
