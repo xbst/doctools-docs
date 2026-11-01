@@ -121,6 +121,22 @@ nav:
       - "Light and dark": pinconnect/examples/light-dark.md
     - "Open the designer": "https://pinconnect.isiks.tech"
     - "GitHub Repository": "https://github.com/xbst/PinConnect"
+  - 3DStep:
+    - 3dstep/index.md
+    - "Getting started": 3dstep/getting-started.md
+    - "Designer": 3dstep/designer.md
+    - "Command line and CI": 3dstep/command-line.md
+    - "Reference":
+      - "Concepts": 3dstep/concepts.md
+      - "Project TOML": 3dstep/reference/project-toml.md
+      - "Themes": 3dstep/reference/themes.md
+      - "The generated page": 3dstep/reference/page.md
+    - "Live examples":
+      - "A real assembly": 3dstep/examples/assembly.md
+      - "Controls and steps": 3dstep/examples/controls.md
+      - "Light and dark": 3dstep/examples/light-dark.md
+    - "Open the designer": "https://3dstep.isiks.tech"
+    - "GitHub Repository": "https://github.com/xbst/3DStep"
   - md-iframe:
     - md-iframe/index.md
     - "Embedding pages": md-iframe/embedding.md

@@ -1,6 +1,7 @@
-# Generated live examples: built by CI (and locally by the same loop) from
-# the TOMLs in docs/pinouts/, which are the source of truth.
+# Generated live examples: built by CI (and locally by the same loops) from
+# the TOMLs in docs/pinouts/ and docs/3d/, which are the source of truth.
 docs/pinouts/**/*.pinout.html
+docs/3d/**/*.3dstep.html
 
 # Zensical build output and cache
 site/
