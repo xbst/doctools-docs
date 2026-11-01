@@ -61,7 +61,7 @@ Indenting a step's sub-tables is only for reading; TOML does not need it. Every 
 | `models` | yes | — | The GLB files of the models, one per imported file, relative to this file: normally just their names, with the files beside it. Each must end in `.glb` and be listed once. |
 | `description` | no | `""` | A line under the title in the panel, and the page's description for search engines. |
 | `theme` | no | `"default"` | The [theme](themes.md): the colors, fonts and behavior of the page around the model. |
-| `theme_dir` | no | `"./themes"` | Folder holding theme `.toml` files, relative to this file. Names not found here fall back to the themes bundled with the package. |
+| `theme_dir` | no | `"./themes"` | Folder holding theme `.toml` files, relative to this file. Names not found here fall back to the themes bundled with the package. The designer cannot read the folder: it uses the theme files [opened with the project](../designer.md#a-sites-own-theme) in its place. |
 | `style` | no | `"lineart"` | `"lineart"`: flat parts with dark edges, like a printed manual. `"shaded"`: the model's colors, lit. |
 | `up` | no | `"z"` | The model axis that points up: `"z"` (most CAD tools) or `"y"` (Fusion). One axis for every model: the designer rotates a model it adds after the first, if its axis differs. |
 | `start` | no | `"visible"` | Every part before step 1: `"visible"`, or `"hidden"` for instructions whose steps add the parts. |

@@ -229,7 +229,7 @@ The page's elements have classes starting with `tds-`. `[extra_css]` may also be
 
 A theme in the bundled folder appears in the designer's Theme selector when you reload the designer, with nothing to regenerate or restart: the designer reads the same files the renderer does.
 
-A project-local theme is a different matter. The designer has your project file but not your `theme_dir`, so it cannot load the theme: it previews the project with the default look and says so, as an error when the theme is meant to be in the default `./themes` and as a warning with another `theme_dir`. Its Generate dialog renders only with a bundled theme you pick there, which also sets the project's `theme`: undo that before you save. Use the [command line](../command-line.md) for those projects, or bundle the theme.
+A project-local theme reaches the designer when you open its file with the project. The designer cannot read your `theme_dir`, so open the theme's `.toml` together with the project TOML and its models, with any font file its `[font]` names, or drop them on the viewport. The designer writes them where the project's `theme_dir` points in its own file system and finds the theme exactly as the command line does: the Theme selector lists it as `<name> (project)`, the viewport previews it, and Generate gives the command line's page. Until it is opened, a project whose theme is not bundled previews with the default look, a banner offers to open the theme file, and the status bar reports the theme, as an error when it is meant to be in the default `./themes` and as a warning with another `theme_dir`. See [a site's own theme](../designer.md#a-sites-own-theme).
 
 ## A site theme
 
@@ -241,7 +241,7 @@ The live examples on this site use `isikstech`, a theme kept in `docs/3d/` besid
     --8<-- "docs/3d/isikstech.toml"
     ```
 
-[Publish on a docs site](../../guides/publishing.md#a-shared-theme) shows the folder layout.
+[Publish on a docs site](../../guides/publishing.md#a-shared-theme) shows the folder layout. To work on one of these projects in the designer, open `isikstech.toml` with it.
 
 ## Tips
 

@@ -93,10 +93,10 @@ def _served_designer(tmp: Path) -> Path:
 def _project_files(project: Path, tmp: Path) -> list[Path]:
     """A copy of the project without its own theme, plus its models.
 
-    The designer can only use the themes bundled with 3dstep, so a project
-    naming a site theme previews with the default look and warns about it.
-    That is correct and the docs describe it, but it makes a poor picture of
-    the normal path, and the shots would depend on which project was passed.
+    Opened without its theme file, a project naming a site theme previews
+    with the default look under a banner asking for that file. That is
+    correct and the docs describe it, but it makes a poor picture of the
+    normal path, and the shots would depend on which project was passed.
     The original file is not modified.
     """
     text = project.read_text(encoding="utf-8")

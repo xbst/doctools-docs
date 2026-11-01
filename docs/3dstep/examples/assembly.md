@@ -23,7 +23,7 @@ The model came from the adapter's 18 MB STEP export through the designer. The bo
 
 ## The sources
 
-Download [`pican2.toml`](../../3d/pican2/pican2.toml) and [`pican2.glb`](../../3d/pican2/pican2.glb) and open them together in the [designer](https://3dstep.isiks.tech) with **Open project**. The designer cannot read the project's own theme, so it previews the project with the default look and says so. Picking a bundled theme in its Generate dialog renders the page there, and also sets the project's theme, so undo it before saving.
+Download [`pican2.toml`](../../3d/pican2/pican2.toml), [`pican2.glb`](../../3d/pican2/pican2.glb) and the theme, [`isikstech.toml`](../../3d/isikstech.toml), and open the three together in the [designer](https://3dstep.isiks.tech) with **Open project**. The designer then previews the project in the site's theme, and its Generate gives this page. Opened without the theme, the project previews with the default look, and a banner offers to open `isikstech.toml`.
 
 ??? example "The theme, `isikstech.toml`"
 

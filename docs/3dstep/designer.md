@@ -38,7 +38,7 @@ A toolbar across the top, three panels whose dividers you can drag, and a status
 
 While the renderer is still starting, the toolbar shows its progress ("Starting renderer…", then "Loading 3DStep…") and **Generate** is disabled. Everything else works straight away, including importing.
 
-The **Theme** selector sets the project's `theme`, and **Style** its `style`: line art, white parts with dark edges as in a printed manual, or shaded, in the model's colors. The viewport previews both. The designer's own chrome keeps its dark colors whichever theme you pick, and the viewport previews the page's dark palette until you switch it with the scheme button in the viewport's toolbar. See [Themes](reference/themes.md).
+The **Theme** selector sets the project's `theme`, and **Style** its `style`: line art, white parts with dark edges as in a printed manual, or shaded, in the model's colors. The viewport previews both. The selector lists the bundled themes, then any theme opened with the project, marked "(project)": see [a site's own theme](#a-sites-own-theme). The designer's own chrome keeps its dark colors whichever theme you pick, and the viewport previews the page's dark palette until you switch it with the scheme button in the viewport's toolbar. A theme whose page is transparent, like a docs site's, shows on a white page in the light preview. See [Themes](reference/themes.md).
 
 Below 900 pixels wide the inspector moves under the viewport, and below 700 pixels everything stacks. The designer is a desktop tool: it works on a laptop screen, and a phone is better for checking the generated page than for building one.
 
@@ -189,11 +189,11 @@ Click **Generate**. The dialog renders the page with the same code as the `3dste
 
 ![The Generate dialog: a theme selector, the size of the page, a Download button, and the rendered page with its 3D view and step panel](../assets/3dstep/workflow-9-generate.png)
 
-- **Theme** sets the project's `theme`, the same setting as the toolbar's selector, and renders again, so the page you download matches the project you save.
+- **Theme** sets the project's `theme`, the same setting as the toolbar's selector, and renders again, so the page you download matches the project you save. It lists the bundled themes and those opened with the project, and starts on the project's own.
 - The size beside it is the size of the page you are about to download.
 - **Download** saves the page as `<project name>.3dstep.html`.
 
-Problems the page renders with anyway are listed above the preview. If the project cannot be rendered, the dialog shows why and Download is disabled until it can.
+Problems the page renders with anyway are listed above the preview. If the project cannot be rendered, the dialog shows why and Download is disabled until it can. A project whose theme is neither bundled nor opened is one of those: the dialog says which file to open, and its **Open `<theme>.toml`** button opens it and renders again.
 
 ### 8. Save and open projects
 
@@ -204,6 +204,14 @@ Click **Save project** (`Ctrl+S`). It saves the project file, `<name>.toml`, the
 Each GLB file is matched to the name the project gives it, in any case: `DM1-ID-214.glb` opens as `dm1-id-214.glb` when that is the project's name for it, as the `3dstep` command finds it on Windows and macOS. The project keeps its own spelling, and the status bar names the file opened under another one; see [a file opened as another name](#the-status-bar-says-a-file-was-opened-as-another-name).
 
 If you close or reload the tab with changes you have not saved, the browser asks you to confirm first.
+
+#### A site's own theme
+
+A project can read its theme from a folder of its own, as the examples on this site do: a docs site keeps its theme beside its projects and points `theme_dir` at it. The designer cannot read that folder, so open the theme's `.toml` together with the project, its GLB files and any font file the theme's `[font]` names, or drop them all on the viewport. A `.toml` with `[theme]` or `[colors]` tables and no `[assembly]` is taken for a theme, not a project.
+
+The designer then finds the theme where the `3dstep` command would: the **Theme** selector lists it as `<name> (project)`, the viewport previews its colors in both schemes, and Generate gives the command line's page, byte for byte. An opened theme takes the place of a bundled theme of the same name, as a file in `theme_dir` does for the command line.
+
+A project whose theme is neither bundled nor opened previews with the default look, and a banner names the file, with an **Open `<theme>.toml`** button. A theme file opened on its own, with that button, **Open project** or a drop, joins the project on screen. The designer only reads theme files, never changes or saves them, and they belong to the project they were opened with: opening another project drops them, and undoing that Open brings them back.
 
 ## Keyboard shortcuts
 
@@ -245,11 +253,15 @@ A STEP file of about 45 MB or more fills the browser reader's 2 GB of memory. Sp
 
 ### My theme is missing
 
-The designer offers the themes bundled with 3DStep. It cannot read a theme in a project's own `theme_dir`, because that folder is on your disk and the designer only has the project file. Such a project previews with the default look, and the status bar reports the theme: as an error when the theme is meant to be in `./themes`, the default `theme_dir`, and as a warning with another folder. **Generate** says it cannot use the theme. Picking a bundled theme in the Generate dialog renders the page with it, but that sets the project's `theme` too, as the toolbar's selector does: undo it before you save, or the project loses its own theme's name. Render the project with the [command line tool](command-line.md) to get the page in its own theme. A docs site's own theme, like the one on this site, works this way.
+The designer has the themes bundled with 3DStep and the theme files opened with the project. A theme kept in a project's own `theme_dir`, like a docs site's, is on your disk, where the designer cannot look: until you open its file, the project previews with the default look, a banner offers to open the file, and **Generate** says which file it needs. The status bar reports the theme as an error when it is meant to be in `./themes`, the default `theme_dir`, where a missing file is most likely a typo, and as a warning with another folder, where the command line may find it. Open the theme's `.toml` with the banner's button, **Open project** or a drop, and the designer previews and generates with it; see [a site's own theme](#a-sites-own-theme).
+
+A theme whose `[font]` uses `source = "bundled"` needs its font file as well: open it together with the theme. Until then the status bar warns that the font file is missing, naming it as the theme does, and Generate stops with the same message.
+
+Picking another theme in the Theme selector or the Generate dialog renders with that one, but it sets the project's `theme` too: undo it before you save, or the project loses its own theme's name.
 
 ### The status bar says a file was opened as another name
 
-Open matches a GLB file to the name the project gives it in any case, so `dm1-id-214.glb` opens for a project naming `DM1-ID-214.glb`. The project keeps its own spelling, and the status bar says "dm1-id-214.glb opened as DM1-ID-214.glb"; hover it for the details. The `3dstep` command finds that file under the project's spelling on Windows and macOS, whose file systems ignore case, but not on Linux, which is what most CI runners use: rename the file to match. A model opened with the banner's button under another name altogether is named the same way.
+Open matches a GLB file to the name the project gives it in any case, so `dm1-id-214.glb` opens for a project naming `DM1-ID-214.glb`. The project keeps its own spelling, and the status bar says "dm1-id-214.glb opened as DM1-ID-214.glb"; hover it for the details. The `3dstep` command finds that file under the project's spelling on Windows and macOS, whose file systems ignore case, but not on Linux, which is what most CI runners use: rename the file to match. A model or theme opened with a banner's button under another name altogether is named the same way.
 
 ### The status bar says two models share an id
 

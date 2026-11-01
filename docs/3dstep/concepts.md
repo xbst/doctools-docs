@@ -102,7 +102,7 @@ The project says what the page shows; a theme says how the page looks around it:
 
 Four themes ship with 3DStep: `default`, `slate`, `midnight` and `workbench`. A project picks one with `theme`, and `3dstep -t` overrides that for one run. A theme name is looked up in the project's `theme_dir` (default `./themes`, beside the project) first, then in the bundled themes, so a documentation site can keep a theme of its own beside its projects. See [Themes](reference/themes.md).
 
-The designer only sees the bundled themes. It cannot read a theme in a project's own `theme_dir`, since that lives on your disk: it previews such a project with the default look and says so, and its Generate dialog renders it only in a bundled theme, which also sets the project's `theme` until you undo it. Render those projects with the [command line](command-line.md).
+The designer has the bundled themes, and a theme of your own when you open its file with the project. It cannot read a project's `theme_dir`, which lives on your disk, so it takes the theme TOML opened or dropped together with the project and finds it where the command line would: it previews the project in that theme, and its Generate gives the command line's page. Until then it previews such a project with the default look, and a banner offers to open the theme file. See [a site's own theme](designer.md#a-sites-own-theme).
 
 ## Keeping pages small
 

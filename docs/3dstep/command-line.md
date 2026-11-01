@@ -127,7 +127,7 @@ Two things are resolved relative to the project file:
 - **The models**, from `models` in `[assembly]`: the GLB files the designer saved, beside the project. They are written into the page, so it needs nothing beside it.
 - **The theme**, from `theme_dir` (default `./themes`, beside the project) first, then the themes bundled with the package. See [Themes](reference/themes.md).
 
-A project using its own `theme_dir` is one the designer cannot render faithfully, since that theme is on your disk. Render those with this command.
+The designer cannot read a project's own `theme_dir`, which is on your disk: open the theme's file there together with the project, and its Generate gives this command's page. See [a site's own theme](designer.md#a-sites-own-theme).
 
 ## Choose a theme
 

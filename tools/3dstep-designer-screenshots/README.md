@@ -16,7 +16,7 @@ The project defaults to `docs/3d/pican2/pican2.toml` in this repository. The STE
 These details keep the images honest and independent of which project you pass:
 
 - It builds the Pyodide payload into the served copy, with the viewer runtime beside it, and waits for the runtime to report ready. Without that the designer shows "Renderer unavailable", and Generate and the status bar's checks would be missing from every shot.
-- It strips `theme` and `theme_dir` from a copy of the project before opening it. The designer cannot read a project's own theme, so it would preview with a warning; the original file is not modified.
+- It strips `theme` and `theme_dir` from a copy of the project before opening it. Opened without its theme file, a project naming a site theme would preview with the default look under a banner asking for that file; the original file is not modified.
 - Its HTTP server binds an ephemeral port, serves the designer's files with explicit content types (a Windows registry can map `.js` to plain text), and shuts down after capture, so it does not claim a fixed port or interfere with another development server.
 
 Requires `playwright` (`pip install playwright`); it drives the system Chrome, no download needed. The designer loads Roboto from Google Fonts and Pyodide from a CDN, so this needs network access. Commit the regenerated PNGs whose pixels changed.

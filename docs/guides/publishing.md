@@ -200,4 +200,4 @@ theme = "mysite"
 theme_dir = ".."
 ```
 
-The two tools' theme files have the same shape but their own tokens, so a site keeps one for each. This site's [PiCAN 2 example](../3dstep/examples/assembly.md) uses one; see [3DStep themes reference](../3dstep/reference/themes.md#a-site-theme). The 3DStep designer cannot read a site theme, so render those projects with the command line, as the loop does.
+The two tools' theme files have the same shape but their own tokens, so a site keeps one for each. This site's [PiCAN 2 example](../3dstep/examples/assembly.md) uses one; see [3DStep themes reference](../3dstep/reference/themes.md#a-site-theme). The 3DStep designer cannot read the folder, so open the site theme's `.toml` together with a project to work on it there; its Generate then gives the page the loop renders.
