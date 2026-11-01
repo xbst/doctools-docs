@@ -241,7 +241,7 @@ Wrote /path/to/tq2-hardware.step  (TQ2 hardware: 18 components, 7.62 MB)
 | Key | Required | Meaning |
 |---|---|---|
 | `name` | yes | The STEP file to write: a file name ending in `.step` or `.stp`, without a folder. Two files cannot have the same name. |
-| `assembly` | yes | The name of the assembly in the file. The designer names the model's top group after it and builds the ids from it, so each file needs its own. |
+| `assembly` | yes | The name of the assembly in the file. The designer names the model's top group, and that group's id, after it, so each file needs its own: a model with an id that another model already uses gets all of its ids prefixed. |
 | `take` | yes | The products the file holds, as `--list` names them: every instance of each. `"*"` takes every product no other file names, in one file at most. A product goes in one file only. |
 
 A product that no file takes is left out of the split, with a warning. The spec's mistakes are errors named like the project file's, such as `tq2-split.toml: [[file]] #2: take: 'TQ2 T5' is not a top-level component (nearest: TQ2-T5)`, and nothing is written.
