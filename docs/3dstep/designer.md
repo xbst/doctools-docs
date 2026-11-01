@@ -149,7 +149,9 @@ A **move** places parts for the current step only, relative to their assembled p
 
 Arrows and labels placed with the tools are **attached** to the part you click: their points are stored in that part's frame, so they travel with it while it moves. While you place an arrow, a preview follows the pointer and a line at the bottom of the viewport says what the next click does:
 
-![The Arrow tool halfway: the tail placed on the board and a preview of the arrow following the pointer, with the prompt along the bottom of the viewport](../assets/3dstep/workflow-7-arrow.png)
+![The Arrow tool halfway: the tail placed on the board and a preview of the arrow following the pointer; the board under the pointer is tinted, and the prompt along the bottom of the viewport ends with its name](../assets/3dstep/workflow-7-arrow.png)
+
+A click lands on the first surface under the pointer, so where one part lies in front of another, it takes the front one. While the Arrow, Rotate arrow or Label tool is active, or the inspector's **Pick** or **Pick fit…** waits for a click, the part a click would land on is tinted with a softer version of the selection color, and its name and id follow the prompt.
 
 `Esc` cancels a tool's pending click, then goes back to **Select**; with **Select** active it clears the selection.
 
