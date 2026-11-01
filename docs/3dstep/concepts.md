@@ -26,7 +26,9 @@ Keep the project and its models. A page is derived from them, so when the assemb
 
 A **model** is one imported file, stored as one GLB. A project has one or more: a board, the enclosure it goes into, the screws.
 
-Inside a model is the assembly's tree, as the CAD file has it. A **part** is a node with geometry: the unit you show, hide, move and highlight. A **group** is a node with children, and naming a group anywhere in a project means every part in it.
+Inside a model is the top of the assembly's tree: the assembly is a group, and each of its top-level components is a node under it. A **part** is a node with geometry: the unit you show, hide, move and highlight. A **group** is a node with children, and naming a group anywhere in a project means every part in it.
+
+The STEP reader keeps the tree only that deep. A component that is itself an assembly, a board exported with its heatsink say, comes in as one part holding every body under it, and its own structure is gone: split at the import, it becomes a group with one part per body, not the sub-assembly's parts as the CAD tool had them. So every part the instructions move, highlight or show on its own should be a top-level component of the STEP export, or a STEP file of its own, placed as in the assembly. `3dstep model.step` reads a file the same way, and `3dstep split` cuts at the same level.
 
 Every node has an **id**, made from its name in the CAD file: accents and other non-ASCII characters are dropped, letters are lowercased, and every run of other characters becomes `_`, so `M3 x 8 Screw` becomes `m3_x_8_screw`. Names that repeat get `_2`, `_3` and so on, in the order the file lists them. Ids never change after the import: renaming a part in the designer changes its display name, not its id, so every step that names it keeps working. Ids are what you write in the [project file](reference/project-toml.md).
 
@@ -66,9 +68,11 @@ What the reader sees when the step changes:
 
 - **Going to a step**, with Next, Previous, the step list or a key: parts glide from where they are shown to where the new step shows them, parts that appear or disappear fade, and the camera flies to the new step's view. That takes 600 ms in the bundled themes.
 - **Play** moves the step's moved parts from their offsets into their assembled places, in 900 ms. Pressing it again, **Reset**, puts them back.
-- **Next** first plays the moves the next step does not keep, then goes on. A board pulled out in step 2 slides in when the reader presses Next, then the camera flies to step 3. Reading through with Next shows every part going into place.
+- **Next** first plays the moves the next step does not keep, then goes on. A board pulled out in step 2 slides in when the reader presses Next, then the camera flies to step 3. Reading through with Next shows every part going into place. A part the next step moves as well is not played: it glides from this step's offset to the next step's with the step change, as every part does. A heatsink lifted 45 mm over a board lifted 30 mm, then lifted 30 mm with the board in the next step, sinks 15 mm on Next and goes home with the board a step later.
 - **Play all** steps through from the current step on its own: the moves, a pause, the next step. It stops at the last step, or as soon as the reader changes the step, presses Play or turns the view.
 - **An auto arrow** points from a moved part toward its place. It is on for every move unless the move says `arrow = false`, and it shrinks as the part travels and vanishes when the part arrives. It runs along the move in the gap between the part as shown and where it lands, from the side of the part's bounding box that faces its place to the near side of the box it lands in, so it never starts inside the part nor ends buried in what the part goes into. Its length is the move less the part's size along it: a screw 17.5 mm long moved 22 mm along its length gets a short arrow under its tip, moved 30 mm a clear one, and a move shorter than the part plus the arrow's head gets none. A wide part seen from above hides the arrow under it: the 30 mm fan of the ToqueCAN 2 guide, seen from about 30° above, shows its arrow only when lifted more than about 32 mm, so it is lifted 40. An arrow that would run through another part the step moves, a fan's hub above its frame say, is left out.
+
+A move shows where a part comes from. To show where a part will sit before the step that installs it, show it in an earlier step with `ghost` and no move: it stands translucent in its assembled place, the board a cable will reach, say. Hide it again in the step that follows, since a shown part stays shown but a ghost lasts one step.
 
 Themes can change the durations and play each step's moves as soon as it is shown. A reader whose system asks for reduced motion gets no animation at all: steps switch at once.
 
@@ -80,7 +84,7 @@ Themes can change the durations and play each step's moves as soon as it is show
 
 An arrow or label can be **attached** to a part. Its points are then measured in that part's frame, so it moves with the part: an arrow attached to a screw travels with the screw as it goes into place. The designer's tools attach what they place to the part you click.
 
-Arrows are sized from the model, within limits, so they suit a small board and a big enclosure alike. A theme can scale them.
+Arrows are sized from the project as a whole: an arrow's head is 3% of the diagonal of the box around every model, kept between 2 and 20 mm, so a small board and a big enclosure each get arrows in proportion when each is a project of its own. The box is the same in every step, so a small part shown with a big one gets the big one's arrows: a body about 300 mm square gives 12.5 mm arrow heads, which dwarf the 2 mm screws of a 60 mm board inside it. The project's [`arrow_scale`](reference/project-toml.md#assembly) scales every arrow of its page (`0.4` makes those heads 5 mm; the designer's Steps tab has it as **Arrow size**), and a theme's [`arrow_scale`](reference/themes.md#behavior) every arrow on every page that uses it; the two multiply. [`[[step.arrow]]`](reference/project-toml.md#steparrow) has the exact rule.
 
 ## Cameras
 
@@ -112,7 +116,7 @@ A CAD model of a product is usually far over that. The ways down, roughly in the
 
 1. **Drop small bodies** at the import. The default of 2 mm leaves out the resistors, capacitors and pins of a board from an EDA tool, often a third or more of its triangles.
 2. **Delete** what the instructions never show, in the Parts tab.
-3. **Merge** a group into one part when its parts never move apart. A merged part also draws faster.
+3. **Merge** a group of many small parts, or a selection of parts, into one part when they never move apart: the page no longer describes each part, and the merged part draws faster. Merging drops no triangles, and a merged part with more than 65,535 vertices needs 32-bit indices, so merging one very large group can make the page a little bigger instead: a 150,000-triangle board went from 7.2 to 7.9 MB.
 4. **Simplify** the parts with the most triangles. A board can usually go to a fifth of its triangles before the line art looks any different.
 5. **Import at Coarse quality**, for models with many curved surfaces.
 6. **Split the instructions** into one page per section, each with only the parts its steps need, rather than one page for the whole product.
