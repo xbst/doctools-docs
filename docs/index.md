@@ -2,6 +2,7 @@
 description: "Open-source documentation tools from Isik's Tech: PinConnect turns a board photo into an interactive pinout, and md-iframe embeds pages like it in MkDocs and Zensical sites."
 hide:
   - footer
+  - toc
 ---
 # Isik's Tech Doc Tools
 

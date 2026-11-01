@@ -1,5 +1,7 @@
 ---
 description: "PinConnect turns a photo of a circuit board into an interactive pinout diagram, made in the browser or rendered from a config on the command line."
+hide:
+  - toc
 ---
 # PinConnect
 

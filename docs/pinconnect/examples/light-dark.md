@@ -1,5 +1,7 @@
 ---
 description: "A live demonstration of how a PinConnect pinout follows a docs site's light/dark toggle, or stays pinned to one scheme with ?theme=."
+hide:
+  - toc
 ---
 # Light and dark
 

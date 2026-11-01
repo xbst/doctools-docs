@@ -1,5 +1,7 @@
 ---
 description: "Every connector type bundled with PinConnect as a live pinout: hover a card to see the connector drawn with sample pins."
+hide:
+  - toc
 ---
 # Connector gallery
 

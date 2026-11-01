@@ -1,5 +1,7 @@
 ---
 description: "A live PinConnect pinout of the OwlFC-Mini filament changer controller, in a custom theme that matches this docs site."
+hide:
+  - toc
 ---
 # A real board
 

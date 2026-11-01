@@ -1,5 +1,7 @@
 ---
 description: "A live PinConnect pinout of pin headers with jumper settings: on/off, one of several, combinations, and groups."
+hide:
+  - toc
 ---
 # Jumper settings
 
