@@ -209,7 +209,7 @@ instances  bodies  product
 
 A product is a part or a sub-assembly of the CAD file, and each place the assembly uses it is an instance. The body counts show where the size is: in this ToqueCAN 2 on a Raspberry Pi, a 71.5 MB file, the Pi and the TQ2-T5 board hold most of the 1,530 bodies. A file of several top-level shapes with no assembly around them lists the shapes instead.
 
-The split cuts the assembly at its top level only: a sub-assembly among the components goes into a file whole, and `take` cannot name a product inside one. The designer and `3dstep model.step` read a STEP file the same way, keeping the top-level components and flattening everything below them into bodies, so a board exported with its heatsink is one part on every path. For a part inside a sub-assembly that the instructions move on its own, export the sub-assembly from your CAD tool as a STEP file of its own, in its assembled position, or make the part a top-level component of the assembly; in the designer, Split and Merge group can separate one body from the rest, see [Import a model](designer.md#1-import-a-model).
+A sub-assembly among the components goes into a file whole, unless `take` reaches into it (next section). The designer and `3dstep model.step` read a STEP file the same way, keeping the top-level components and flattening everything below them into bodies, so a board exported with its heatsink is one part on every path.
 
 Without a spec, `3dstep split` writes one file per product, named after it (`tq2_t5.step`, `m2_5_threaded_insert.step`, …), beside the assembly. A spec groups the components into the files you want instead. It is TOML, with one `[[file]]` table per file:
 
@@ -244,17 +244,62 @@ Wrote /path/to/tq2-hardware.step  (TQ2 hardware: 18 components, 7.62 MB)
 |---|---|---|
 | `name` | yes | The STEP file to write: a file name ending in `.step` or `.stp`, without a folder. Two files cannot have the same name. |
 | `assembly` | yes | The name of the assembly in the file. The designer names the model's top group, and that group's id, after it, so each file needs its own: a model with an id that another model already uses gets all of its ids prefixed. |
-| `take` | yes | The products the file holds, as `--list` names them: every instance of each. `"*"` takes every product no other file names, in one file at most. A product goes in one file only. |
+| `take` | yes | The products the file holds, as `--list` names them: every instance of each. A path such as `"SM3/SLM HS RC"` takes the components inside a sub-assembly, see [below](#components-inside-a-sub-assembly). `"*"` takes every component no other file names, in one file at most. A component goes in one file only. |
 
 A product that no file takes is left out of the split, with a warning. The spec's mistakes are errors named like the project file's, such as `tq2-split.toml: [[file]] #2: take: 'TQ2 T5' is not a top-level component (nearest: TQ2-T5)`, and nothing is written.
 
 | Option | Default | Meaning |
 |---|---|---|
 | `--list` | | Print the top-level components, in the file's order, and write nothing. |
+| `--depth N` | 1 | With `--list`: show the products inside each sub-assembly too, N levels down. |
 | `--spec SPLIT.toml` | a file per product | Which components go into which file. |
 | `-o OUT_DIR` | the assembly's folder | The folder to write the files in, made if it is missing. A file that would replace the assembly itself is refused. |
 
 The ToqueCAN 2 split takes about 30 seconds, and the designer then reads the three files in a minute or two. Import them one after another: each becomes a model of the project, and they sit together as in the assembly. The edges are written without their 2D curves, which OpenCascade computes again when it reads a file, so together the files are about the size of the original. One product too big on its own, such as a board with every component modeled, stays too big after the split: drop detail from it in your CAD tool, or convert it with [`3dstep model.step`](#convert-a-step-file) and import the GLB.
+
+### Components inside a sub-assembly
+
+A part the instructions move on its own may sit inside a sub-assembly of the export: a board with its heatsink, say, which every reader turns into one part. `--depth` lists what the sub-assemblies hold, indented under them:
+
+```bash
+3dstep split SM3-3DS.step --list --depth 2
+```
+
+```
+SM3-3DS.step: assembly 'Stealthmax_V2', 7 top-level components of 7 products
+instances  bodies  product
+        1      11  Stealthmax Visible
+        1       1    M_1a.0_FlowChamber_BPM (1) (2) (1)
+        1       7    1.1_Servo_Exhaust_Mechanism (1) (1)
+        1       2    PC6_Bowden (1) (1)
+        1       1    Spare (1) (1)
+        1       4  MX3.0 Port
+        1       1    MX3.0 Port Cover
+        1       3    SM MX3.0 PCB
+        1     836  SM3
+        1       1    SLM HS RC
+        1     835    SM3 RC2 v2
+        1       1  M2x10mm ST
+        1       1  M2x8mm ST
+        1       1  PCB Spacer
+        1       1  Port Cover Cable
+```
+
+A product inside a sub-assembly is counted over every instance of the sub-assembly: two brackets with three bolts each list the bolt with 6 instances. In a spec, `take` names such a product by its path, the names from the top down separated by `/`:
+
+```toml
+[[file]]
+name = "heatsink.step"
+assembly = "Heatsink"
+take = ["SM3/SLM HS RC"]
+
+[[file]]
+name = "rest.step"
+assembly = "Rest"
+take = ["*"]
+```
+
+The heatsink file gets every `SLM HS RC` inside every `SM3`, placed where the whole assembly has it, and `"*"` gets what is left of `SM3`, the board, placed the same way, beside the other components; the designer then imports the heatsink as a model of its own. A path goes as deep as the assembly does, `"Case/Hinge/Pin"`, and a product name may itself hold a slash: at each level the longest product name the path starts with is tried first. A path and the sub-assembly it starts with cannot both be taken, so `take = ["SM3", "SM3/SLM HS RC"]` is an error, and what a path leaves in its sub-assembly is left out, with a warning, when no file takes `"*"`. A path whose name is not a component of the sub-assembly before it is an error that names that level: `take: 'SM3/SLM HS': 'SLM HS' is not a component of 'SM3' (nearest: SLM HS RC)`.
 
 ## Regenerating as an assembly changes
 
@@ -282,7 +327,7 @@ All of these print to stderr and exit with status 1.
 - **`Error: … could not be read as a STEP file`**: OpenCascade could not read it. The message quotes its last messages.
 - **`Error: … has no bodies of N mm or larger; lower the size filter`**: `--min-size` dropped everything.
 - **`Error: out of memory while converting …`**: use `--quality coarse`, or split the assembly into smaller STEP files with [`3dstep split`](#split-a-big-assembly).
-- **`Error: <spec>: [[file]] #N: …`**: a problem in a split spec, such as an unknown or missing key, a product that is not a top-level component, a product two files take, or two files with one name or one assembly name. The message lists the nearest product names.
+- **`Error: <spec>: [[file]] #N: …`**: a problem in a split spec, such as an unknown or missing key, a product that is not a top-level component, a path whose name is not a component of the sub-assembly before it, a path and that sub-assembly both taken, a product two files take, or two files with one name or one assembly name. The message lists the nearest product names.
 - **`Error: … has no components to split: it holds one part`**: the STEP file is a single part.
 - **`Error: port must be between 0 and 65535`**: an out-of-range `--port`.
 
