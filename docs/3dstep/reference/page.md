@@ -28,7 +28,7 @@ When the page is 760 pixels wide or less in the default theme, on a phone or in 
 - **Play** moves the step's moved parts into their places, and **Reset** puts them back. **Next** plays the moves the next step does not keep before it goes on, so reading through with Next shows every part going into place.
 - **Play all** steps through on its own from the current step, and stops at the last one, or as soon as the reader changes the step, presses Play or turns the view.
 
-Moving to a step glides the parts to their new places and flies the camera to the step's view. A reader whose system asks for reduced motion gets no animation: steps switch at once.
+Moving to a step glides the parts to their new places and flies the camera to the step's view. A zoom while the camera flies (the wheel, the **+** and **−** buttons or keys) is kept and applied where it arrives. A reader whose system asks for reduced motion gets no animation: steps switch at once.
 
 ## Turning the view
 
