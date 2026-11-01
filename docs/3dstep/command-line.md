@@ -59,7 +59,7 @@ pip install .
 pip install -e .
 ```
 
-An editable install also makes `3dstep` serve the designer files in your checkout, so edits to them take effect on reload. The designer's renderer is built from the package when `3dstep` starts, so restart it after changing the Python code, the viewer or a theme.
+An editable install also makes `3dstep` serve the designer files in your checkout, so edits to them take effect on reload. The same goes for the Python code, the viewer and the themes: the designer's renderer is built from the package, and a running `3dstep` rebuilds it when the reloaded designer asks for it. Only a change to the server itself (`serve.py`, `payload.py`) needs a restart.
 
 ## Run the designer locally
 

@@ -227,7 +227,7 @@ The page's elements have classes starting with `tds-`. `[extra_css]` may also be
 2. Put it either in the **bundled themes** folder (`src/threedstep/themes/` in a clone of the repository, shipped with the package) or in a **project-local** `theme_dir` next to your project (handy for a site theme you don't want to bundle). A project-local theme of the same name overrides a bundled one.
 3. Reference it with `theme = "<name>"` (or `--theme <name>`).
 
-A theme in the bundled folder appears in the designer's Theme selector after you restart `3dstep`, with nothing to regenerate: the designer reads the same files the renderer does.
+A theme in the bundled folder appears in the designer's Theme selector when you reload the designer, with nothing to regenerate or restart: the designer reads the same files the renderer does.
 
 A project-local theme is a different matter. The designer has your project file but not your `theme_dir`, so it cannot load the theme: it previews the project with the default look and says so, as an error when the theme is meant to be in the default `./themes` and as a warning with another `theme_dir`. Its Generate dialog renders only with a bundled theme you pick there, which also sets the project's `theme`: undo that before you save. Use the [command line](../command-line.md) for those projects, or bundle the theme.
 
