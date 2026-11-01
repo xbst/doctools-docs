@@ -1,6 +1,6 @@
-site_name: Isik's Tech Doc Tools
+site_name: Isik's Tech Documentation Tools
 site_url: https://doctools.isiks.tech
-site_description: Documentation for Isik's Tech's open-source documentation tools, PinConnect interactive pinouts and the md-iframe Markdown extension.
+site_description: Documentation for Isik's Tech's open-source documentation tools, including PinConnect interactive pinouts, 3DStep and the md-iframe Markdown extension.
 site_author: XBST LLC
 copyright: Copyright &copy; 2026 XBST LLC
 repo_url: https://github.com/xbst
@@ -66,6 +66,8 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.tilde
   - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
   - sane_lists
   - attr_list
   - pymdownx.emoji:
