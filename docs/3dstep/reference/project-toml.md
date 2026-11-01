@@ -153,7 +153,13 @@ An arrow of the step's own. Optional, any number.
 
 To show a screw being tightened, put `from` at the screw's head and `to` further along the screw, into the part: positive turns then sweep clockwise as you look at the head. The designer's Rotate arrow tool places its arrows this way, with `to` inside the part you click; make `turns` negative to show a screw coming out.
 
-Arrows are sized from the model, and a theme can scale them with `arrow_scale`. A straight arrow shorter than its head is not drawn.
+Arrows are sized from the models: an arrow's head is 3% of the diagonal of the box around every model, kept between 2 and 20 mm, and a theme scales every arrow with `arrow_scale`. A straight arrow shorter than its head is not drawn, so make `from` and `to` at least that far apart: 2 mm for an assembly up to about 67 mm across, more for a bigger one. `3dstep` and the designer's status bar warn about such an arrow, with its length and the head's:
+
+```
+pican2.toml: [[step]] #2 (push): [[step.arrow]] #1 is shorter than its head (1.5 mm < 2.0 mm) and will not be drawn
+```
+
+A rotate arrow's arc has the size its `radius` gives it, so this limit does not apply to it.
 
 ### `[[step.label]]`
 
@@ -220,6 +226,7 @@ These are warnings: they are printed as `Warning:` lines, and the page is still 
 - A `[[part]]` for an id no model has.
 - An id that two models share, so the page cannot tell those parts apart.
 - A step that highlights, ghosts or moves a part that is hidden in that step, names one in its own `fit`, or attaches an arrow or label to one.
+- A straight arrow shorter than its head, which the page does not draw; see [`[[step.arrow]]`](#steparrow).
 - An arrow `color` that is not a CSS color. A hex color missing its `#` gets one.
 - A project with no steps.
 - A model without 3DStep's metadata, which is then read as millimeters with Z up.
