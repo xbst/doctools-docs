@@ -15,7 +15,7 @@ Things to try:
 - **Flip the site's light/dark toggle.** The pinout follows it; see [Light and dark mode](../../guides/light-dark.md).
 - **Press the fullscreen button** beside the list toggle.
 
-The pinout uses `isikstech`, a theme kept beside the board folders rather than bundled with PinConnect. It has a transparent background, amber highlights, Roboto, and `tooltip_placement = "panel"`, which shows the selected connector in a panel under the board instead of a floating tooltip. See [Theming concepts](../../guides/theming.md#matching-your-site).
+The pinout uses `isikstech`, a theme kept beside the board folders rather than bundled with PinConnect. It has a transparent background, amber highlights, Roboto, and `tooltip_placement = "panel"`, which shows the selected connector in a panel under the board instead of a floating tooltip.
 
 ## The sources
 

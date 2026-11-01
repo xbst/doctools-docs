@@ -34,7 +34,3 @@ There are two ways of generating pinouts with it:
 - [Board TOML](reference/board-toml.md): every field in a board config, including jumper settings for pin headers.
 - [Connector types](reference/connector-types.md): the built-in library, and adding your own.
 - [Themes](reference/themes.md): colors, fonts, and layout behavior, and writing your own theme.
-
-### Live examples
-
-- [Live examples](examples/index.md): a real board, every connector type, jumper settings, and light and dark mode, all generated from TOMLs on every deploy of this site.

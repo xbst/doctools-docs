@@ -75,4 +75,3 @@ You don't need it for the pinout you just downloaded, but it makes editing pinou
 - [Concepts](concepts.md): what the config actually describes, and how connector types and themes are resolved.
 - [Command line and CI](command-line.md): regenerate pinouts from the command line, or from CI.
 - [Embedding with md-iframe](../md-iframe/embedding.md): put the pinout into an MkDocs or Zensical page.
-- [Live examples](examples/index.md): more generated pinouts, embedded in this site.

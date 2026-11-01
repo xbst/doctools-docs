@@ -54,4 +54,4 @@ document.querySelectorAll("iframe.md-iframe").forEach(function (f) { f.addEventL
 
 ## The palettes themselves
 
-Every bundled PinConnect theme carries both a light and a dark palette, and a theme of your own can set either or both. See [Theming concepts](theming.md) and the [themes reference](../pinconnect/reference/themes.md).
+Every bundled PinConnect theme carries both a light and a dark palette, and a theme of your own can set either or both. See [themes reference](../pinconnect/reference/themes.md).

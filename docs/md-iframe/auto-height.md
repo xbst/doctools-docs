@@ -5,7 +5,7 @@ description: "The postMessage protocol an embedded page uses to tell md-iframe i
 
 An iframe does not size itself to its content. md-iframe fixes that with one small message: the embedded page posts its content height to the parent, and md-iframe sets the iframe to that height. This page describes the message, so any tool or hand-written page can take part.
 
-PinConnect pinouts implement it today. The [live examples](../pinconnect/examples/index.md) on this site use it: narrow the window until a pinout's connector list moves below the board, and the frame grows to fit.
+PinConnect pinouts implement it today. The live examples on this site use it: narrow the window until a pinout's connector list moves below the board, and the frame grows to fit.
 
 ## The message
 

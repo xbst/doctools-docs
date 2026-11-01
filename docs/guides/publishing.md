@@ -145,4 +145,4 @@ theme = "mysite"
 theme_dir = ".."
 ```
 
-with the theme in `docs/pinouts/mysite.toml`. The loop above only renders `docs/pinouts/*/*.toml`, so the theme itself is never rendered as a board. This site's [OwlFC-Mini example](../pinconnect/examples/board.md) uses one; see [Theming concepts](theming.md) and the [PinConnect themes reference](../pinconnect/reference/themes.md).
+with the theme in `docs/pinouts/mysite.toml`. The loop above only renders `docs/pinouts/*/*.toml`, so the theme itself is never rendered as a board. This site's [OwlFC-Mini example](../pinconnect/examples/board.md) uses one; see [PinConnect themes reference](../pinconnect/reference/themes.md).
