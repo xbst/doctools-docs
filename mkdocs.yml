@@ -107,10 +107,10 @@ nav:
   - PinConnect:
     - pinconnect/index.md
     - "Getting started": pinconnect/getting-started.md
-    - "The designer": pinconnect/designer.md
-    - "Concepts": pinconnect/concepts.md
+    - "Designer": pinconnect/designer.md
     - "Command line and CI": pinconnect/command-line.md
     - "Reference":
+      - "Concepts": pinconnect/concepts.md
       - "Board TOML": pinconnect/reference/board-toml.md
       - "Connector types": pinconnect/reference/connector-types.md
       - "Themes": pinconnect/reference/themes.md
