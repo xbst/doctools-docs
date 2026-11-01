@@ -13,4 +13,4 @@ python tools/3dstep-theme-gallery/generate.py PROJECT.toml    # your own project
 
 Change `STEP` in `generate.py` for a project whose second step shows less.
 
-Requires `playwright` and `pillow` (`pip install playwright pillow`); Playwright drives the system Chrome, no download needed, and the pages load their fonts from Google Fonts, so this needs network access. Output is resized to 1600px wide and saved as WebP (50 to 80 KB each) to keep the repository small. Commit the regenerated `.webp` files whose pixels changed.
+Requires `playwright` and `pillow` (`pip install playwright pillow`); Playwright drives the system Chrome, no download needed, and the pages load their fonts from Google Fonts, so this needs network access. Output is resized to 1600px wide and saved as WebP (60 to 100 KB each) to keep the repository small. Commit the regenerated `.webp` files whose pixels changed.
