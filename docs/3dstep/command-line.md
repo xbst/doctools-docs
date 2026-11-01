@@ -180,7 +180,9 @@ The designer prefixes the ids of a model whose ids another model of the project 
 
 The command line and the designer read a STEP file the same way: the same tree of groups and parts, the same ids, names and colors, so a project written in the designer works with either GLB. The triangles differ, though. The designer's reader is built on OpenCascade 7.6 and the extra on 8.0, whose meshers do not always split a curved face the same way: the example above has 34,691 triangles imported in the designer and 35,011 converted here. The same converter on Linux and on Windows can split a few faces differently too. Commit the GLB the designer wrote where you want the same file every time, and convert in pipelines that regenerate GLBs from STEP files.
 
-The converter does not simplify. To get a big model under the [size guidance](concepts.md#keeping-pages-small), open its GLB in the designer, simplify there, and save. The GLB always records Z as its up axis; a model from a Y-up CAD tool such as Fusion needs `up = "y"` in its project's `[assembly]`.
+The converter does not simplify. To get a big model under the [size guidance](concepts.md#keeping-pages-small), open its GLB in the designer, simplify there, and save.
+
+The converter keeps the STEP file's axes, and the GLB always records Z as its up axis: it cannot know which axis the CAD tool had up. A model from a Y-up CAD tool such as Fusion needs `up = "y"` in its project's `[assembly]`, and when you add its GLB to a project in the designer, choose **Y** as its up axis in the import dialog. The designer rotates a model added to a project with the other up axis (see [Import a model](designer.md#1-import-a-model)); the converter never does, so it cannot regenerate such a model's GLB: commit the GLB the designer wrote for it.
 
 ## Regenerating as an assembly changes
 

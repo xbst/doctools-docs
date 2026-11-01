@@ -32,6 +32,8 @@ Ids are made one model at a time, so two models can have parts with the same nam
 
 **Units and axes** are the CAD file's own: millimeters, and the axes your CAD tool shows, with `up` saying which one points up (Z in most CAD tools, Y in Fusion). Every coordinate you see in the project file, the designer and your CAD tool is the same number. Nothing is scaled or turned to suit a 3D format.
 
+A project has one up axis, which its first model sets. A model you add later from a CAD tool with the other axis up is rotated a quarter turn to the project's axis when the designer imports it, so that it stands upright beside the others; its coordinates are then the project's, not its CAD tool's.
+
 A part's **assembled pose** is where it sits in the CAD file, the place it ends up when the assembly is done.
 
 ## Steps

@@ -56,7 +56,7 @@ For a STEP file, the **Import a STEP model** dialog asks how to read it:
 - **Drop bodies smaller than**: bodies whose bounding box is smaller than this many millimeters across are left out. 2 mm drops the passives and pins of a board exported from an EDA tool; 0 keeps every body. Parts keep the same ids whatever the filter, so you can import again with another value and the steps still find their parts.
 - **Merge each product's bodies into one part**: one part per component of the assembly, which is what you usually move and highlight. Off, every body is a part of its own.
 - **Simplify**: reduce the triangles to this share as the model is added.
-- **Up axis**: the axis that points up in your CAD tool. The first STEP model of a project proposes **Y**, which is Fusion's; most other CAD tools use **Z**. The first model's choice becomes the project's `up`.
+- **Up axis**: the axis that points up in your CAD tool. The first STEP model of a project proposes **Y**, which is Fusion's; most other CAD tools use **Z**. The first model's choice becomes the project's `up`. For a model added later it is the file's up axis, starting at the project's: the dialog shows the project's axis, and a file with the other axis up is rotated to it.
 
 Click **Import**. The reader runs OpenCascade in your browser, off the page's thread, with a progress line and a timer. A small assembly takes seconds and a 40 MB board about a minute. **Cancel** stops it at once.
 
@@ -68,11 +68,11 @@ The summary counts the parts, groups and triangles, estimates the model's size, 
 
 The table lists every component with several bodies. A merged component is one part; check **Split** to make each of its bodies a part, to move or highlight them one by one: a bag of screws exported as one component, say. Decide here: a part cannot be split after the import, but parts can always be merged later.
 
-**Add to project** adds the model. The first model also names an untitled project after its file, sets the project's up axis, and adds a first step.
+**Add to project** adds the model. The first model also names an untitled project after its file, sets the project's up axis, and adds a first step. A later model with the other up axis is rotated a quarter turn about X as it is added, so that it stands upright beside the others, and the review says so; its coordinates are then the project's, not its CAD tool's.
 
 A model whose ids another model of the project already uses gets its file name in front of every id, so the page can tell the two apart: import `dm1-id-214.glb` twice and the second copy, `dm1_id_214_2.glb`, has `dm1_id_214_2_bolt` where the first has `bolt`. The dialog says so before you add it, naming a few of the shared ids and the model that has them. Every id of the model gets the prefix, or none does, and undoing the import takes it back. To convert the same STEP file on a machine later, give [`3dstep model.step`](command-line.md#convert-a-step-file) the same prefix with `--id-prefix`.
 
-A GLB written by 3DStep is used as it is. A GLB from another tool asks for its **Unit** (millimeters, meters or inches; glTF's own unit is meters) and **Up axis** (Y, glTF's convention, or Z), and is converted to millimeters and the project's axes.
+A GLB written by 3DStep is used as it is when it is a project's first model. A later one shows its **Up axis**, as the file records it, beside the project's, and is rotated to the project's axis when the two differ. A GLB that [`3dstep model.step`](command-line.md#convert-a-step-file) converted always says Z, whatever its CAD file had up: for one from Fusion, choose **Y**. A GLB from another tool asks for its **Unit** (millimeters, meters or inches; glTF's own unit is meters) and **Up axis** (Y, glTF's convention, or Z), and is converted to millimeters and the project's axes.
 
 !!! note "Large STEP files"
     The browser's STEP reader has a memory limit of 2 GB, which a STEP file of about 45 MB or more fills while reading. The import then stops with an out-of-memory message, and the designer keeps working. Export the assembly as several STEP files, one model each, in their assembled positions, and import them one after another. Give each file its own top-level assembly name to keep its ids short: a file with an id that an earlier one already uses gets all of its ids prefixed. Or convert the file with [`3dstep model.step`](command-line.md#convert-a-step-file), which has no such limit, and import the GLB it writes.
@@ -251,4 +251,4 @@ The page cannot tell apart the parts of two models that share an id. The designe
 
 ### A model added later lies on its side
 
-The project's up axis comes from its first model. A model added later, written with another up axis, is used as it is: a Z-up GLB in a Y-up project lies on its side. Import every model of a project with the same up axis.
+The project's up axis comes from its first model, and a model added later is rotated to it from the up axis its import dialog showed. A model lies on its side when that axis was wrong for it: most often a GLB converted by `3dstep model.step`, which says Z even when its CAD file is Y-up, as Fusion's are. Undo the import and import it again with the file's real up axis. Opening a project rotates nothing. If the project's first model lies on its side, change the project's **Up axis** in the [Steps tab](#3-lay-out-the-steps-in-the-steps-tab)'s Assembly box instead.

@@ -63,7 +63,7 @@ Indenting a step's sub-tables is only for reading; TOML does not need it. Every 
 | `theme` | no | `"default"` | The [theme](themes.md): the colors, fonts and behavior of the page around the model. |
 | `theme_dir` | no | `"./themes"` | Folder holding theme `.toml` files, relative to this file. Names not found here fall back to the themes bundled with the package. |
 | `style` | no | `"lineart"` | `"lineart"`: flat parts with dark edges, like a printed manual. `"shaded"`: the model's colors, lit. |
-| `up` | no | `"z"` | The model axis that points up: `"z"` (most CAD tools) or `"y"` (Fusion). |
+| `up` | no | `"z"` | The model axis that points up: `"z"` (most CAD tools) or `"y"` (Fusion). One axis for every model: the designer rotates a model it adds after the first, if its axis differs. |
 | `start` | no | `"visible"` | Every part before step 1: `"visible"`, or `"hidden"` for instructions whose steps add the parts. |
 
 ## `[camera]`
