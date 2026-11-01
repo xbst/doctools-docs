@@ -56,7 +56,7 @@ For a STEP file, the **Import a STEP model** dialog asks how to read it:
 - **Drop bodies smaller than**: bodies whose bounding box is smaller than this many millimeters across are left out. 2 mm drops the passives and pins of a board exported from an EDA tool; 0 keeps every body. Parts keep the same ids whatever the filter, so you can import again with another value and the steps still find their parts.
 - **Merge each product's bodies into one part**: one part per component of the assembly, which is what you usually move and highlight. Off, every body is a part of its own.
 - **Simplify**: reduce the triangles to this share as the model is added.
-- **Up axis**: the axis that points up in your CAD tool. The first STEP model of a project proposes **Y**, which is Fusion's; most other CAD tools use **Z**. The first model's choice becomes the project's `up`. For a model added later it is the file's up axis, starting at the project's: the dialog shows the project's axis, and a file with the other axis up is rotated to it.
+- **Up axis**: the axis that points up in your CAD tool. The first STEP model of a project proposes **Y**, Fusion's usual axis, or the axis chosen for the last STEP file imported in this session; most other CAD tools export **Z**-up, and so does a Fusion design made with its Z-up orientation. The first model is never turned: its choice becomes the project's `up`, which the [Steps tab](#3-lay-out-the-steps-in-the-steps-tab)'s Assembly box can change later; see [the first model lies on its side](#the-first-model-lies-on-its-side). For a model added later it is the file's up axis, starting at the project's: the dialog shows the project's axis, and a file with the other axis up is rotated to it.
 
 Click **Import**. The reader runs OpenCascade in your browser, off the page's thread, with a progress line and a timer. A small assembly takes seconds and a 40 MB board about a minute. **Cancel** stops it at once.
 
@@ -67,6 +67,8 @@ Then the dialog shows what the import gives:
 The summary counts the parts, groups and triangles, estimates the model's size, and says how many small bodies the filter dropped. The size filter can still change here, and the summary follows at once; only another quality needs another read, with **Other quality…**. Simplification runs when you add the model, so the counts are the ones before it.
 
 The table lists every component with several bodies. A merged component is one part; check **Split** to make each of its bodies a part, to move or highlight them one by one: a bag of screws exported as one component, say. Decide here: a part cannot be split after the import, but parts can always be merged later.
+
+A sub-assembly among the components is such a component too. The STEP reader keeps the assembly's top-level components and flattens everything below them into the component's bodies, so a board exported with its heatsink is one part, its own structure gone, and Split gives one part per body, the heatsink among them, with an EDA board arriving as hundreds of body parts, one per pad and silkscreen stroke. To end with the board as one part and the heatsink as another: check **Split**, delete the heatsink's body in the Parts tab, select the component's group and **Merge group**, then import the same file again with a size filter large enough to drop most of its bodies and keep only the heatsink from the second copy, whose ids are prefixed. Simpler, make every part the instructions move on its own a top-level component of the export, or a STEP file of its own, placed as in the assembly: [`3dstep split`](command-line.md#split-a-big-assembly) cannot reach into a sub-assembly either.
 
 **Add to project** adds the model. The first model also names an untitled project after its file, sets the project's up axis, and adds a first step. A later model with the other up axis is rotated a quarter turn about X as it is added, so that it stands upright beside the others, and the review says so; its coordinates are then the project's, not its CAD tool's.
 
@@ -87,12 +89,12 @@ The **Parts** tab lists every loaded model and its tree of groups and parts. Eac
 - **Click** a row to select the part, **Ctrl+click** to add or remove one, **Shift+click** to select a range. The selection is shared with the viewport and the inspector.
 - **Isolate** shows only the selection in the current step.
 - **Rename** (or `F2`, or a double click) changes the part's display name, which the page shows. Its **id** never changes after the import, so the steps' references stay valid.
-- **Merge group** turns the selected group into one part with the group's id.
+- **Merge group** turns the selected group into one part with the group's id. It takes one whole group, not a selection of parts: delete the parts you do not want in it first.
 - **Delete** removes the selection from its model, after a confirmation. The steps stop naming it, and Undo brings it back.
 - **Simplify…** reduces the triangles of the selected parts, or of all of them.
 - **Select tiny…** selects every part whose bounding box is smaller than a size, to delete them together.
 
-The line at the bottom shows the triangle count and the estimated size of the generated page. It turns amber above about 3 MB, the size a page should stay under so it loads quickly on a phone. Deleting what the instructions never show, merging groups and simplifying are the ways down; see [Keeping pages small](concepts.md#keeping-pages-small).
+The line at the bottom shows the triangle count and the estimated size of the generated page. It turns amber above about 3 MB, the size a page should stay under so it loads quickly on a phone. Deleting what the instructions never show, merging groups and simplifying are the ways down; see [Keeping pages small](concepts.md#keeping-pages-small). Merging helps most with a group of many small parts; a merged part with more than 65,535 vertices needs 32-bit indices, so merging one very large group can make the page a little bigger, a 150,000-triangle board from 7.2 to 7.9 MB.
 
 ![The Simplify meshes dialog: the target share of the triangles, the error bound, the face borders option, and which parts to simplify](../assets/3dstep/designer-simplify.png)
 
@@ -197,7 +199,7 @@ Problems the page renders with anyway are listed above the preview. If the proje
 
 ### 8. Save and open projects
 
-Click **Save project** (`Ctrl+S`). It saves the project file, `<name>.toml`, then every model marked unsaved, as `<model>.glb`. Where the browser lets a page choose where files go, you pick the folder for the TOML and each model is suggested beside it; elsewhere they download. Keep them in one folder: the project finds its models by file name, and a banner reminds you which files belong together.
+Click **Save project** (`Ctrl+S`). It saves the project file, `<name>.toml`, then every model marked unsaved, as `<model>.glb`. The name is the opened project file's, else the title in the Steps tab made into a file name the way ids are (`Mount the PCB` saves as `mount_the_pcb.toml`), else the first model's (`pican2_in_shell.toml` beside `pican2_in_shell.glb`); where the browser lets you choose, the dialog proposes it, and the project keeps the name you pick for the next save. Where the browser lets a page choose where files go, you pick the folder for the TOML and each model is suggested beside it; elsewhere they download. Keep them in one folder: the project finds its models by file name, and a banner reminds you which files belong together.
 
 **Open project** takes the TOML and its GLB files together, chosen at once or dropped on the viewport together. A project whose models are not all loaded shows a banner naming them, with a button to open each of the first three.
 
@@ -249,7 +251,7 @@ If you serve the designer folder yourself, the same message means its payload, `
 
 ### The import runs out of memory
 
-A STEP file of about 45 MB or more fills the browser reader's 2 GB of memory. Split the assembly into several STEP files with [`3dstep split`](command-line.md#split-a-big-assembly) or in your CAD tool and import them one after another, or convert it on a machine with [`3dstep model.step`](command-line.md#convert-a-step-file); see [Import a model](#1-import-a-model).
+A STEP file of about 45 MB or more fills the browser reader's 2 GB of memory. The dialog reads for a while first, its timer counting the seconds (about 40 for a 54 MB file), then stops with "Out of memory while reading `<file>`: reading the file took all of the 2 GB the STEP reader can use, leaving nothing to mesh it with. Split the assembly into smaller STEP files (a project can hold several)." A file that runs out while being meshed gets a shorter message that also suggests the coarse quality, which is worth one try. The designer keeps working either way. Split the assembly into several STEP files with [`3dstep split`](command-line.md#split-a-big-assembly) or in your CAD tool and import them one after another, or convert it on a machine with [`3dstep model.step`](command-line.md#convert-a-step-file); see [Import a model](#1-import-a-model).
 
 ### My theme is missing
 
@@ -267,6 +269,10 @@ Open matches a GLB file to the name the project gives it in any case, so `dm1-id
 
 The page cannot tell apart the parts of two models that share an id. The designer prevents it when you import a model, by [prefixing its ids](#1-import-a-model), but opening a project renames nothing: the warning means the project's GLB files already shared ids when you opened them, or a GLB was converted again with [`3dstep model.step`](command-line.md#convert-a-step-file) without the `--id-prefix` the designer gave it. Convert one of the two models again with `--id-prefix` and add the same prefix to the ids the project names from it, or import it again in the designer, which prefixes the new copy's ids, and point the steps at those.
 
+### The first model lies on its side
+
+The project's up axis is the one chosen in its first model's import dialog, which proposes Y, Fusion's usual axis, or the axis chosen for the last STEP file imported in the session, whatever the file has. The first model is never turned, so a wrong choice moves nothing, but the view cube's **Top** then looks at the model from the side, the home view, which looks from the front, the right and above, is taken from the wrong side, and **Explode step** stacks the parts sideways. Change the **Up axis** in the [Steps tab](#3-lay-out-the-steps-in-the-steps-tab)'s Assembly box: the model stays where it is, and the view cube, the views and the exploding follow. Do it before adding more models: a model added later with the other axis up is rotated to the project's axis, so a wrong project axis turns it the wrong way.
+
 ### A model added later lies on its side
 
-The project's up axis comes from its first model, and a model added later is rotated to it from the up axis its import dialog showed. A model lies on its side when that axis was wrong for it: most often a GLB converted by `3dstep model.step`, which says Z even when its CAD file is Y-up, as Fusion's are. Undo the import and import it again with the file's real up axis. Opening a project rotates nothing. If the project's first model lies on its side, change the project's **Up axis** in the [Steps tab](#3-lay-out-the-steps-in-the-steps-tab)'s Assembly box instead.
+The project's up axis comes from its first model, and a model added later is rotated to it from the up axis its import dialog showed. A model lies on its side when that axis was wrong for it: most often a GLB converted by `3dstep model.step`, which says Z even when its CAD file is Y-up, as Fusion's usually are. Undo the import and import it again with the file's real up axis. Opening a project rotates nothing. If the project's first model lies on its side, see [the first model lies on its side](#the-first-model-lies-on-its-side) instead.

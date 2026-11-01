@@ -209,6 +209,8 @@ instances  bodies  product
 
 A product is a part or a sub-assembly of the CAD file, and each place the assembly uses it is an instance. The body counts show where the size is: in this ToqueCAN 2 on a Raspberry Pi, a 71.5 MB file, the Pi and the TQ2-T5 board hold most of the 1,530 bodies. A file of several top-level shapes with no assembly around them lists the shapes instead.
 
+The split cuts the assembly at its top level only: a sub-assembly among the components goes into a file whole, and `take` cannot name a product inside one. The designer and `3dstep model.step` read a STEP file the same way, keeping the top-level components and flattening everything below them into bodies, so a board exported with its heatsink is one part on every path. For a part inside a sub-assembly that the instructions move on its own, export the sub-assembly from your CAD tool as a STEP file of its own, in its assembled position, or make the part a top-level component of the assembly; in the designer, Split and Merge group can separate one body from the rest, see [Import a model](designer.md#1-import-a-model).
+
 Without a spec, `3dstep split` writes one file per product, named after it (`tq2_t5.step`, `m2_5_threaded_insert.step`, …), beside the assembly. A spec groups the components into the files you want instead. It is TOML, with one `[[file]]` table per file:
 
 ```toml

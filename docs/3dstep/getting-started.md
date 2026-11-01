@@ -7,7 +7,7 @@ This guide takes you from a STEP file of your assembly to a finished page of int
 
 ## What you need
 
-- A **STEP file** (`.step` or `.stp`) of the assembly, exported from your CAD tool. A GLB from another 3D tool works too.
+- A **STEP file** (`.step` or `.stp`) of the assembly, exported from your CAD tool. Every part the instructions move, highlight or show on its own should be a top-level component of it: the STEP reader keeps the top level of the assembly's tree and brings a sub-assembly in as one part, so export a sub-assembly whose parts move separately as a STEP file of its own, in its assembled position, or make its parts top-level components. A GLB from another 3D tool works too.
 - A browser. Nothing else: the designer reads the CAD file and renders the page itself, so there is no install step.
 
 The first load fetches a Python runtime of roughly 10 MB, which takes a few seconds and is then cached; the toolbar tells you when it is ready. The STEP reader, OpenCascade compiled to WebAssembly, downloads the first time you import a STEP file.
@@ -34,7 +34,7 @@ Click **Import model**, or drop the file on the viewport. The import dialog asks
 - **Quality** sets how finely curved surfaces are turned into triangles. **Normal** suits most assemblies.
 - **Drop bodies smaller than** leaves out tiny bodies. The default of 2 mm drops the resistors, capacitors and pins of a board exported from an EDA tool, which a reader does not need and which make the page large. Use 0 to keep everything.
 - **Merge each product's bodies into one part** makes each component of the assembly one part, which is what you move and highlight. You can split single components in the next screen.
-- **Up axis** is the axis that points up in your CAD tool: **Y** for Fusion, **Z** for most others. Everything keeps the CAD tool's coordinates, in millimeters.
+- **Up axis** is the axis that points up in your CAD tool. The dialog proposes **Y**, Fusion's usual axis; most other CAD tools export **Z**-up, and so does a Fusion design made with its Z-up orientation. The first model is never turned, so the choice only records which way is up, and a wrong one is easy to fix: after the import, click **Top** on the view cube in the viewport's corner, which should look down on the model. If it looks at the model from the side, change **Up axis** in the Steps tab's Assembly box, before adding more models, which are turned to the project's axis. Everything keeps the CAD tool's coordinates, in millimeters.
 
 Click **Import**. Reading takes a few seconds for a small assembly and up to a minute for a big one, all of it in your browser. Then the designer shows what it found:
 
