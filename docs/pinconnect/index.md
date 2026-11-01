@@ -7,7 +7,7 @@ hide:
 
 PinConnect turns a photo of a circuit board into an interactive pinout diagram: hover or tap a connector and its pin names, colors, and description appear. The result is a single HTML file you can open in a browser, share, or embed in a documentation site.
 
-![OwlFC-Mini interactive pinout](../pinouts/owlfc-mini/owlfc-mini.pinout.html){ type=iframe }
+![OwlFC-Mini interactive pinout](../pinouts/owlfc-mini/owlfc-mini.pinout.html){ type=iframe style="height:80vh;min-height:500px;width:100%" }
 
 There are two ways of generating pinouts with it:
 
