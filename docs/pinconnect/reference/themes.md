@@ -222,7 +222,7 @@ css = """
 2. Put it either in the **bundled themes** folder (`src/pinconnect/themes/` in a clone of the repository, shipped with the package) or in a **board-local** `theme_dir` next to your board config (handy for a project- or site-specific theme you don't want to bundle). A board-local theme of the same name overrides a bundled one.
 3. Reference it with `theme = "<name>"` (or `--theme <name>`).
 
-A theme in the bundled folder appears in the designer's Theme selector straight away, with nothing to regenerate: the designer reads the same files the generator does.
+A theme in the bundled folder appears in the designer's Theme selector when you reload the designer, with nothing to regenerate or restart: the designer reads the same files the generator does.
 
 A board-local theme is a different matter. The designer has your config text but not your `theme_dir`, so it cannot load the theme, and it will render with the bundled theme of the same name or fall back to the default. It says so when that happens. Use the [command line](../command-line.md) for those boards, or bundle the theme.
 

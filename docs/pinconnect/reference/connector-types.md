@@ -158,7 +158,7 @@ There are two places a type can live, depending on whether it is just for your b
 
 A board-local type is only visible to `pinconnect`. The designer has your config text but not your folder, so it cannot offer the type, and if the name matches a bundled one it will quietly draw the bundled shape instead. It says so when that happens. Render those boards from the [command line](../command-line.md).
 
-**For the shared library.** Create `src/pinconnect/connectors/<TYPE>.toml` in a clone of the PinConnect repository instead. It is then available everywhere, the designer included, with nothing else to regenerate.
+**For the shared library.** Create `src/pinconnect/connectors/<TYPE>.toml` in a clone of the PinConnect repository instead. It is then available everywhere, the designer included once you reload it, with nothing else to regenerate or restart.
 
 Either way, copy an existing type with a similar body as a starting point, and iterate by generating a test board and eyeballing the result — a connector does not have to sit on a real board image while you tune geometry.
 

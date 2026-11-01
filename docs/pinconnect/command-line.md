@@ -57,7 +57,7 @@ pip install .
 pip install -e .
 ```
 
-An editable install also makes `pinconnect` serve the designer files in your checkout, so edits to them take effect on reload.
+An editable install also makes `pinconnect` serve the designer files in your checkout, so edits to them take effect on reload. The same goes for the Python code, the connector types and the themes: the designer's renderer is built from the package, and a running `pinconnect` rebuilds it when the reloaded designer asks for it. Only a change to the server itself (`serve.py`, `payload.py`) needs a restart.
 
 ## Run the designer locally
 
