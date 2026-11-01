@@ -115,7 +115,6 @@ nav:
       - "Connector types": pinconnect/reference/connector-types.md
       - "Themes": pinconnect/reference/themes.md
     - "Live examples":
-      - pinconnect/examples/index.md
       - "A real board": pinconnect/examples/board.md
       - "Connector gallery": pinconnect/examples/connector-gallery.md
       - "Jumper settings": pinconnect/examples/jumpers.md
@@ -128,10 +127,7 @@ nav:
     - "Auto-height protocol": md-iframe/auto-height.md
     - "GitHub Repository": "https://github.com/xbst/md-iframe"
   - Guides:
-    - guides/index.md
-    - "Publish on a docs site": guides/publishing.md
-    - "Light and dark mode": guides/light-dark.md
-    - "Theming concepts": guides/theming.md
+    - "Publishing on a docs site": guides/publishing.md
 
 not_in_nav: |
   migration.md,guides/light-dark.md
