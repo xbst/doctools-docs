@@ -134,4 +134,4 @@ nav:
     - "Theming concepts": guides/theming.md
 
 not_in_nav: |
-  migration.md
+  migration.md,guides/light-dark.md
