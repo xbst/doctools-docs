@@ -131,4 +131,6 @@ nav:
     - "Publish on a docs site": guides/publishing.md
     - "Light and dark mode": guides/light-dark.md
     - "Theming concepts": guides/theming.md
-  - "Migrating from the old names": migration.md
+
+not_in_nav: |
+  migration.md
