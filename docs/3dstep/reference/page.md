@@ -47,6 +47,8 @@ A 3D view inside a documentation page must not trap the page's scrolling, so an 
 
 A click or a tap on the view activates it: an outline in the theme's accent color shows it, and the bar says how to steer it ("Drag to rotate · Scroll to zoom · Esc to release"). It lets go on `Esc`, on a click outside it, when it scrolls out of sight, or two seconds after the mouse leaves it.
 
+The step panel never holds the wheel either, active view or not: over it, the wheel scrolls a step text longer than the panel, then the page once the panel reaches its end, and a panel with nothing to scroll leaves the wheel to the page. Only in fullscreen does the panel keep its scrolling to itself, so the page behind it stays where it was.
+
 A page opened on its own, or in fullscreen, takes the mouse from the start.
 
 ### Fullscreen

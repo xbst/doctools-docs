@@ -11,7 +11,7 @@ A PiCAN 2 USB to CAN adapter going into its printed two-part shell, in four step
 
 Things to try:
 
-- **Scroll past it.** The page scrolls over the viewer until you click it; then the wheel zooms, and `Esc` lets go. See [Scrolling past an embedded page](../reference/page.md#scrolling-past-an-embedded-page).
+- **Scroll past it.** The page scrolls over the viewer until you click it, and over its step panel always; once you click the view, the wheel zooms it, and `Esc` lets go. See [Scrolling past an embedded page](../reference/page.md#scrolling-past-an-embedded-page).
 - **Press Play all** to watch the whole assembly.
 - **Narrow the window.** Once the frame is 760 pixels wide or less, the step panel moves under the view, and the frame grows to fit it, with no scrollbar inside. That is the [auto-height protocol](../../md-iframe/auto-height.md) at work.
 - **Flip the site's light/dark toggle.** The page follows it; see [Light and dark mode](../../guides/light-dark.md).
