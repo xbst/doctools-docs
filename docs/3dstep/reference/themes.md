@@ -185,7 +185,7 @@ weights = "400;500"
 | `controls` | `"full"` | `"full"`: the step panel and every button. `"minimal"`: no panel; the step counter, Previous, Play all and Next over the view, and the step's title under it. `"none"`: the view alone, which readers can still turn. `?controls=` overrides it for one embed. |
 | `edge_width` | `1.0` | Line art: the edges' width in pixels, kept on high-density screens; `0` draws none |
 | `edge_angle` | `35` | Line art: a crease sharper than this many degrees gets an edge, from 0 to 180 |
-| `arrow_scale` | `1.0` | Multiply the size of every arrow |
+| `arrow_scale` | `1.0` | Multiply the size of every arrow, on every page that uses the theme; a project's own [`arrow_scale`](project-toml.md#assembly) multiplies it for one page |
 | `transition_ms` | `600` | The step change and the camera's flight, in milliseconds; `0` switches at once |
 | `play_ms` | `900` | How long Play takes, in milliseconds |
 | `autoplay` | `false` | Play each step's moves as soon as the step is shown. `?autoplay=1` turns it on for one embed |

@@ -65,6 +65,7 @@ Indenting a step's sub-tables is only for reading; TOML does not need it. Every 
 | `style` | no | `"lineart"` | `"lineart"`: flat parts with dark edges, like a printed manual. `"shaded"`: the model's colors, lit. |
 | `up` | no | `"z"` | The model axis that points up: `"z"` (most CAD tools) or `"y"` (Fusion). One axis for every model: the designer rotates a model it adds after the first, if its axis differs. |
 | `start` | no | `"visible"` | Every part before step 1: `"visible"`, or `"hidden"` for instructions whose steps add the parts. |
+| `arrow_scale` | no | `1.0` | Multiplies the size of every arrow on the page, on top of the theme's [`arrow_scale`](themes.md#behavior). A number greater than 0. Arrows are sized from the box around every model, so lower it when a big part makes them too large for the parts the steps are about; see [`[[step.arrow]]`](#steparrow). |
 
 ## `[camera]`
 
@@ -153,7 +154,7 @@ An arrow of the step's own. Optional, any number.
 
 To show a screw being tightened, put `from` at the screw's head and `to` further along the screw, into the part: positive turns then sweep clockwise as you look at the head. The designer's Rotate arrow tool places its arrows this way, with `to` inside the part you click; make `turns` negative to show a screw coming out.
 
-Arrows are sized from the models: an arrow's head is 3% of the diagonal of the box around every model, kept between 2 and 20 mm, and a theme scales every arrow with `arrow_scale`. A straight arrow shorter than its head is not drawn, so make `from` and `to` at least that far apart: 2 mm for an assembly up to about 67 mm across, more for a bigger one. `3dstep` and the designer's status bar warn about such an arrow, with its length and the head's:
+Arrows are sized from the models: an arrow's head is 3% of the diagonal of the box around every model, kept between 2 and 20 mm, then multiplied by the project's [`arrow_scale`](#assembly) and the theme's [`arrow_scale`](themes.md#behavior). A big part makes every arrow of the page big, those on the 2 mm screws of a small board beside it included: lower the project's `arrow_scale`, to `0.4` say, which leaves the theme's scale to the site's other pages. A straight arrow shorter than its head is not drawn, so make `from` and `to` at least that far apart: 2 mm for an assembly up to about 67 mm across at the default scales, more for a bigger one. `3dstep` and the designer's status bar warn about such an arrow, with its length and the head's:
 
 ```
 pican2.toml: [[step]] #2 (push): [[step.arrow]] #1 is shorter than its head (1.5 mm < 2.0 mm) and will not be drawn

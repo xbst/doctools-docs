@@ -106,9 +106,9 @@ A model that is not saved as it stands, a new import or one you deleted parts fr
 
 The **Steps** tab holds the assembly's settings and the list of steps.
 
-![The Steps tab: the assembly's title, description, starting state, up axis and home view, then the list of steps with their summaries](../assets/3dstep/workflow-4-steps.png)
+![The Steps tab: the assembly's title, description, starting state, up axis, arrow size and home view, then the list of steps with their summaries](../assets/3dstep/workflow-4-steps.png)
 
-The **Assembly** box sets the page's **Title** and **Description**, what every part is **Before step 1** (visible, or hidden when each step adds parts), the **Up axis**, and the **Home view**: **Use view** makes the current view the page's home view, where step 1 starts, and **Clear** fits the model instead.
+The **Assembly** box sets the page's **Title** and **Description**, what every part is **Before step 1** (visible, or hidden when each step adds parts), the **Up axis**, the **Arrow size** (a factor on every arrow of the page, `arrow_scale` in the TOML: arrows are sized from the box around every model, so lower it when a big part makes them too large for the parts the steps are about; see [Arrows and labels](concepts.md#arrows-and-labels)), and the **Home view**: **Use view** makes the current view the page's home view, where step 1 starts, and **Clear** fits the model instead.
 
 Below it, the list of steps. Each row shows the step's title and a summary of what it changes: `+2` shows two parts, `−1` hides one, `★1` highlights one and `◌1` ghosts one, then its moves, arrows and labels, and `camera` or `fit` when it has a view of its own.
 
