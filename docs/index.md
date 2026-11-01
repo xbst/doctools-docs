@@ -4,43 +4,44 @@ hide:
   - footer
   - toc
 ---
-# Isik's Tech Doc Tools
+# Isik's Tech Documentation Tools
 
-Open-source tools for writing better hardware documentation. We built them for the [Isik's Tech docs](https://docs.isiks.tech) and use them there every day.
+Open-source tools for writing better hardware documentation. Initially built for [Isik's Tech docs](https://docs.isiks.tech), open-sourced so others can use them too.
 
 <div class="grid cards" markdown>
 
--   **[PinConnect](pinconnect/index.md)**
+-    ## PinConnect
+    ---
+    
+    PinConnect turns a photo of a circuit board into an interactive pinout: hover or tap a connector to see its pinout. Make one in the browser at [pinconnect.isiks.tech](https://pinconnect.isiks.tech), or render it from a config on the command line.
+    
+    === "Animated demo"
+        ![A generated PinConnect pinout: hovering connectors on the board, then opening the connector list and picking connectors from it](assets/pinconnect/pinout-demo.gif)
+         
+        *A generated pinout for the [Birds' Nest CAN](https://store.isiks.tech/products/birds-nest-CAN) board — hover a connector on the board for its pinout, or open the connector list to browse every connector at once.*
+    
+    === "Interactive pinout"
+        ![OwlFC-Mini interactive pinout](pinouts/owlfc-mini/owlfc-mini.pinout.html){ type=iframe }
+        
+        *Above pinout was generated for [OwlFC-Mini docs](https://docs.isiks.tech/owlfc-mini/manual/#pinout) using PinConnect with a custom theme, embedded with [md-iframe](#md-iframe).*
 
     ---
+    
+    [Documentation](pinconnect){ .md-button .md-button--primary } [Repo](https://github.com/xbst/PinConnect){ .md-button }
 
-    Turns a photo of a circuit board into an interactive pinout: hover or tap a connector and its pin names, colors and description appear. Make one in the browser at [pinconnect.isiks.tech](https://pinconnect.isiks.tech), or render it from a config on the command line.
+<!--- 3DStep goes here --->
 
-    [Get started](pinconnect/getting-started.md) · [Live examples](pinconnect/examples/index.md)
-
--   **[md-iframe](md-iframe/index.md)**
-
+-     ##md-iframe
     ---
-
-    A Python-Markdown extension for MkDocs and Zensical sites. It turns an image-style tag into an `<iframe>` that sizes itself to the page inside it and shows a visible error when the file is missing.
-
-    [Embed a page](md-iframe/embedding.md) · [Auto-height protocol](md-iframe/auto-height.md)
+    A Python-Markdown extension for MkDocs and Zensical sites. It turns an image-style tag into an `<iframe>` that sizes itself to the page inside it and shows a visible error when the file is missing. Supports syncing dark/light mode and automatic resizing.
+     
+     ---
+     
+    [Documentation](md-iframe){ .md-button .md-button--primary } [Repo](https://github.com/xbst/md-iframe){ .md-button }
 
 </div>
 
-Here is a PinConnect pinout embedded with md-iframe. Hover a connector, or open the connector list:
-
-![OwlFC-Mini interactive pinout](pinouts/owlfc-mini/owlfc-mini.pinout.html){ type=iframe }
-
-## Guides
-
-These topics apply to every tool on this site:
-
-- [Publish on a docs site](guides/publishing.md): generate pages in CI and deploy them with GitHub Pages.
-- [Light and dark mode](guides/light-dark.md): how an embedded page follows your site's color scheme.
-- [Theming concepts](guides/theming.md): what a theme controls, and where it comes from.
-
-Coming from `pinout-gen` or `pinout-embed`? Nothing breaks; see [Migrating from the old names](migration.md).
+!!! info "Coming from `pinout-gen` or `pinout-embed`? Nothing breaks; see [Migrating from the old names](migration.md)."
 
 ## License
 
