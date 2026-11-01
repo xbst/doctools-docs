@@ -68,7 +68,7 @@ Indenting a step's sub-tables is only for reading; TOML does not need it. Every 
 
 ## `[camera]`
 
-The home view: where the page starts, and what step 1 looks from. Optional. Without it, the page looks from the front, the right and above, framing the whole model.
+The home view: where the page starts, and what step 1 looks from. Optional. Without it, the page looks from the front, the right and above, and until a step sets a camera of its own, each step frames what it shows, as a [`fit`](#stepcamera) of those parts would.
 
 | Key | Required | Default | Meaning |
 |-----|----------|---------|---------|
@@ -112,12 +112,12 @@ An id in any list may be a group's, which means every part under it. One id writ
 
 ### `[step.camera]`
 
-The step's own view. Optional: without it, the step keeps the previous step's view, and step 1 starts from `[camera]`.
+The step's own view. Optional: without it, the step keeps the previous step's camera (a `fit` frames its parts again, where this step shows them), and step 1 starts from `[camera]`.
 
 | Key | Required | Default | Meaning |
 |-----|----------|---------|---------|
 | `position`, `target` | no | — | The step's own view, as in [`[camera]`](#camera). Give both, or neither. |
-| `fit` | no | — | Instead of `position` and `target`: ids to frame, from the previous step's direction, with a margin. The parts are framed where the step shows them, moves included. |
+| `fit` | no | — | Instead of `position` and `target`: ids to frame, from the previous step's direction. Their outline fills the view's width or height with a 10% margin, below the buttons along the top of the view. The parts are framed where the step shows them, and moved parts where they land as well. Parts the step hides are left out, and when it hides them all, the camera frames what the step shows. |
 | `fov` | no | the previous step's | As in `[camera]`. |
 | `projection` | no | the previous step's | As in `[camera]`. |
 
@@ -132,7 +132,7 @@ Where parts sit in this step, relative to their assembled pose. A part with no m
 | `parts` | yes | — | One or more ids. A group moves as one body. |
 | `offset` | no | `[0.0, 0.0, 0.0]` | Millimeters along the model's axes. |
 | `rotate` | no | `[0.0, 0.0, 0.0]` | Degrees about the model's X, Y and Z axes (Euler angles in XYZ order), about the center of the part's assembled bounding box, or the group's. |
-| `arrow` | no | `true` | Draw an auto arrow from the moved part toward its place. It shrinks as the part travels. It runs between the part's two centers, so a long part moved a short way along its length hides its arrow inside itself. |
+| `arrow` | no | `true` | Draw an auto arrow from the moved part toward its place. It runs along the move in the gap between the part's bounding box as shown and the box it lands in, and shrinks as the part travels. A gap shorter than the arrow's head gets no arrow, so move a part further than its own size along the move. An arrow that would run through another part moved in the step, a fan's hub above its frame say, is left out. |
 
 A part may be in only one move of a step, also when a group brings it in.
 
@@ -217,7 +217,7 @@ These are warnings: they are printed as `Warning:` lines, and the page is still 
 
 - A `[[part]]` for an id no model has.
 - An id that two models share, so the page cannot tell those parts apart.
-- A step that highlights, ghosts or moves a part that is hidden in that step, or attaches an arrow or label to one.
+- A step that highlights, ghosts or moves a part that is hidden in that step, names one in its own `fit`, or attaches an arrow or label to one.
 - An arrow `color` that is not a CSS color. A hex color missing its `#` gets one.
 - A project with no steps.
 - A model without 3DStep's metadata, which is then read as millimeters with Z up.
