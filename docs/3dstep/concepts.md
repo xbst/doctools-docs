@@ -116,7 +116,7 @@ A CAD model of a product is usually far over that. The ways down, roughly in the
 
 1. **Drop small bodies** at the import. The default of 2 mm leaves out the resistors, capacitors and pins of a board from an EDA tool, often a third or more of its triangles.
 2. **Delete** what the instructions never show, in the Parts tab.
-3. **Merge** a group of many small parts into one part when they never move apart: the page no longer describes each part, and the merged part draws faster. Merging drops no triangles, and a merged part with more than 65,535 vertices needs 32-bit indices, so merging one very large group can make the page a little bigger instead: a 150,000-triangle board went from 7.2 to 7.9 MB.
+3. **Merge** a group of many small parts, or a selection of parts, into one part when they never move apart: the page no longer describes each part, and the merged part draws faster. Merging drops no triangles, and a merged part with more than 65,535 vertices needs 32-bit indices, so merging one very large group can make the page a little bigger instead: a 150,000-triangle board went from 7.2 to 7.9 MB.
 4. **Simplify** the parts with the most triangles. A board can usually go to a fifth of its triangles before the line art looks any different.
 5. **Import at Coarse quality**, for models with many curved surfaces.
 6. **Split the instructions** into one page per section, each with only the parts its steps need, rather than one page for the whole product.

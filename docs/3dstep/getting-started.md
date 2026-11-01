@@ -52,7 +52,7 @@ Aim for a page under about **3 MB**, which loads quickly on a phone. To get ther
 
 - **Delete** parts the instructions never show.
 - **Select tiny…** selects every part under a size, to delete them together.
-- **Merge group** turns a group of parts into one part.
+- **Merge group** turns a group of parts into one part; with several parts selected it reads **Merge parts** and merges them into the one you pick.
 - **Simplify…** reduces the triangles of the selected parts, or of all of them, while keeping their outlines and creases.
 
 The example on this page was 34,691 triangles after the import, and 18,537 after simplifying the board to half: a 1.4 MB page.
