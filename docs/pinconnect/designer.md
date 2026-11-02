@@ -44,13 +44,13 @@ Click **Open Image** and choose your photo, taken top-down. It sets the coordina
 
 ### 2. Add connectors
 
-Click **+ Add Connector** in the connector list or board panel (it becomes **Cancel Draw**), then drag a box over a connector. Releasing the drag opens the **New Connector** dialog, where you set the **ID** (one is suggested; it must be unique and non-empty), an optional **Name** (defaults to the ID), and the **Type**. Click **Create** to place it, or **Cancel** to discard the box. Very small boxes are ignored, so drag a real rectangle rather than clicking.
+Click **+ Add Connector** in the connector list or board panel (it becomes **Cancel Draw**), then drag a box over a connector. Releasing the drag opens the **New Connector** dialog, where you set the **ID** (one is suggested; it must be unique and non-empty), an optional **Name** (defaults to the ID), and the **Type**, from the same grouped menu as the [connector editor's](#3-edit-the-connector). Click **Create** to place it, or **Cancel** to discard the box. Very small boxes are ignored, so drag a real rectangle rather than clicking.
 
 Draw mode switches off after each connector, so click **+ Add Connector** again for the next.
 
 ![The board with a labeled box drawn over each connector](../assets/pinconnect/workflow-2-connectors.png)
 
-The **Connectors** tab shows each connector's name, type, pin count, and symbol when set. Click a row to select that connector on the board and in the editor. Drag its handle to reorder the list, or use **Move Up** and **Move Down** for the selected connector; this also sets connector order in the generated pinout. Each row has **Duplicate** and **Delete** buttons. A duplicate keeps the pins and settings, gets a unique ID and name, and appears slightly offset on the board so you can move it into place. Reordering, duplicating, and deleting all support Undo and Redo.
+The **Connectors** tab shows each connector's name, type, pin count, and symbol when set. The type is shown by its menu name, such as **2.54mm Dual Row**; hover it for the type's ID and group. Click a row to select that connector on the board and in the editor. Drag its handle to reorder the list, or use **Move Up** and **Move Down** for the selected connector; this also sets connector order in the generated pinout. Each row has **Duplicate** and **Delete** buttons. A duplicate keeps the pins and settings, gets a unique ID and name, and appears slightly offset on the board so you can move it into place. Reordering, duplicating, and deleting all support Undo and Redo.
 
 In the board panel you can:
 
@@ -68,7 +68,7 @@ With a connector selected, the **Connector Editor** shows:
 
 - **ID**: unique identifier.
 - **Name**: the label shown on the diagram.
-- **Type**: the connector type, which drives the rendered shape.
+- **Type**: the connector type, which drives the rendered shape. The menu groups the types into **JST**, **Molex**, **Pin Header**, **Screw Terminal** and **Other**, and names each one plainly: the two-row 2.54 mm header is **2.54mm Dual Row** under **Pin Header**. The config stores the type's ID, here `HDR-254-2R`; the [built-in types](reference/connector-types.md#built-in-types) table lists both.
 - **Orient.**: rotation, one of 0°, 90°, 180° or 270°.
 - **Labels**: flat, staircase or staggered pin labels on horizontal connectors, to avoid overlaps.
 - **Desc.**: an optional longer description.
@@ -76,7 +76,7 @@ With a connector selected, the **Connector Editor** shows:
 
 The preview underneath is drawn by the generator, so it is exactly the shape the finished pinout will contain.
 
-![The Connector Editor showing the fields for the CAN connector, with a live preview of the MX-F-2R type below them](../assets/pinconnect/workflow-3-connector.png)
+![The Connector Editor showing the fields for the CAN connector, with its Type set to Micro-Fit 3.0 Dual Row (MX-F-2R) and a live preview of that type below them](../assets/pinconnect/workflow-3-connector.png)
 
 ### 4. Edit the pins
 
@@ -95,7 +95,7 @@ Pin order in the list is the physical pin order in the output.
 
 ### 5. Add jumper settings (pin headers)
 
-A jumper header is read by position rather than by pin, so on the pin header types (`HDR-*`) the editor adds a **Jumper settings** section below the pins, and numbers each pin in the list: those are the numbers jumpers use. Each setting is one way of fitting the header's jumpers, and becomes a button in the generated pinout. The [board TOML reference](reference/board-toml.md#connectorsetting) shows how common headers map to settings, from an on/off jumper to a microstepping table.
+A jumper header is read by position rather than by pin, so on the pin header types (the **Pin Header** group of the Type menu, `HDR-*` in the config) the editor adds a **Jumper settings** section below the pins, and numbers each pin in the list: those are the numbers jumpers use. Each setting is one way of fitting the header's jumpers, and becomes a button in the generated pinout. The [board TOML reference](reference/board-toml.md#connectorsetting) shows how common headers map to settings, from an on/off jumper to a microstepping table.
 
 ![The connector editor for a fan voltage selector in pick mode: the drawing with its pins numbered 1 to 6 and a jumper cap on pins 3 and 4, above three setting cards for 5V, 12V and VIN, with the 12V card active and its Pick button showing Done](../assets/pinconnect/workflow-jumpers.png)
 
