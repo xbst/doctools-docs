@@ -6,29 +6,31 @@ Type definitions live in the package's [`src/pinconnect/connectors/`](https://gi
 
 ## Built-in types
 
-| Type | Style | Notes |
-|------|-------|-------|
-| `XH-F` | latch | JST XH female, single row |
-| `PH-F` | latch | JST PH female, single row |
-| `SHERLOCK-F` | sherlock | Sherlock female, single row; body widens at 3 ways or fewer matching real Sherlock connectors |
-| `HDR-127` | header-male | 1.27 mm male pin header |
-| `HDR-127-2R` | header-male | 1.27 mm male pin header, two rows |
-| `HDR-200` | header-male | 2.00 mm male pin header |
-| `HDR-200-2R` | header-male | 2.00 mm male pin header, two rows |
-| `HDR-254` | header-male | 2.54 mm male pin header |
-| `HDR-254-2R` | header-male | 2.54 mm male pin header, two rows |
-| `ST-254` | screw-terminal | 2.54 mm pitch screw terminal |
-| `ST-508` | screw-terminal | 5.08 mm pitch screw terminal |
-| `ST-BR-508` | barrier | 5.08 mm barrier screw terminal strip |
-| `ST-BR-950` | barrier | 9.5 mm barrier screw terminal strip |
-| `MX-F-1R` | grid | Micro-Fit female, single row |
-| `MX-F-2R` | grid | Micro-Fit female, two rows |
-| `USB-C` | box | Simple rectangular body |
-| `XT30-2+2` | xt30 | XT30 power + 2 signal pins |
-| `STEPSTICK-F` | stepstick | StepStick stepper-driver socket, female: two 8-way 2.54 mm headers and a two-pin tower, 18 pins in all |
-| `button` | button | Tactile push-button / switch footprint |
-| `slide-switch` | slide-switch | Slide switch; its pins are the slider's positions |
-| `none` | none | Nothing at all; marks a spot on the board that has no pinout to show |
+The table follows the designer's **Type** menu, which lists each type under a category by a plainer name. **Type** is what a board's `type` field holds; the menu entry is only what the designer shows for it.
+
+| Type | Designer menu | Style | Notes |
+|------|---------------|-------|-------|
+| `PH-F` | JST › PH (2.0mm) | latch | JST PH female, single row |
+| `XH-F` | JST › XH (2.5mm) | latch | JST XH female, single row |
+| `MX-F-2R` | Molex › Micro-Fit 3.0 Dual Row | grid | Micro-Fit female, two rows |
+| `MX-F-1R` | Molex › Micro-Fit 3.0 Single Row | grid | Micro-Fit female, single row |
+| `SHERLOCK-F` | Molex › Sherlock (2.0mm) | sherlock | Sherlock female, single row; body widens at 3 ways or fewer matching real Sherlock connectors |
+| `HDR-127-2R` | Pin Header › 1.27mm Dual Row | header-male | 1.27 mm male pin header, two rows |
+| `HDR-127` | Pin Header › 1.27mm Single Row | header-male | 1.27 mm male pin header |
+| `HDR-200-2R` | Pin Header › 2.00mm Dual Row | header-male | 2.00 mm male pin header, two rows |
+| `HDR-200` | Pin Header › 2.00mm Single Row | header-male | 2.00 mm male pin header |
+| `HDR-254-2R` | Pin Header › 2.54mm Dual Row | header-male | 2.54 mm male pin header, two rows |
+| `HDR-254` | Pin Header › 2.54mm Single Row | header-male | 2.54 mm male pin header |
+| `ST-254` | Screw Terminal › 2.54mm | screw-terminal | 2.54 mm pitch screw terminal |
+| `ST-508` | Screw Terminal › 5.08mm | screw-terminal | 5.08 mm pitch screw terminal |
+| `ST-BR-508` | Screw Terminal › 5.08mm Barrier | barrier | 5.08 mm barrier screw terminal strip |
+| `ST-BR-950` | Screw Terminal › 9.5mm Barrier | barrier | 9.5 mm barrier screw terminal strip |
+| `none` | Other › None (marker only) | none | Nothing at all; marks a spot on the board that has no pinout to show |
+| `button` | Other › Push Button | button | Tactile push-button / switch footprint |
+| `slide-switch` | Other › Slide Switch | slide-switch | Slide switch; its pins are the slider's positions |
+| `STEPSTICK-F` | Other › StepStick Socket | stepstick | StepStick stepper-driver socket, female: two 8-way 2.54 mm headers and a two-pin tower, 18 pins in all |
+| `USB-C` | Other › USB-C | box | Simple rectangular body |
+| `XT30-2+2` | Other › XT30 (2+2) | xt30 | XT30 power + 2 signal pins |
 
 `Male` and `Female` refer to the gender of the plastic housing of the connector, not the pins, as that's what the end user will see when using the board.
 
@@ -51,6 +53,8 @@ A type file has a `[connector]` table and a `[geometry]` table:
 ```toml
 [connector]
 name = "Micro-Fit"
+category = "Molex"
+menu_name = "Micro-Fit 3.0 Dual Row"
 style = "grid"
 
 [geometry]
@@ -60,11 +64,11 @@ wall = 2.5
 pin_cy = 25.9
 pin_radius = 1.8
 pinout_side = "bottom"
-line_length = 15.0
+line_length = 8.0
 rows = 2
 row2_pin_cy = 13.7
 row2_pinout_side = "top"
-row2_line_length = 15.0
+row2_line_length = 8.0
 cavity_size = 10.5
 ```
 
@@ -72,7 +76,9 @@ That is `MX-F-2R.toml` verbatim. Copying a bundled type that resembles what you 
 
 ### `[connector]`
 
-- `name` — human-readable name for the connector family.
+- `name` — human-readable name for the connector family, shown on the generated page beside each connector's pin count, as in `Micro-Fit · 4-pin`.
+- `category` — optional. The group the designer's **Type** menu lists the type under, such as `"Pin Header"`. Groups are in alphabetical order with `Other` last, and a type without a category goes in `Other`.
+- `menu_name` — optional. The type's entry in that group, such as `"2.54mm Dual Row"`; without it the menu shows `name`. Entries are in alphabetical order within their group, with numbers compared by value, so `9.5mm` comes before `10mm`. The designer's connector list shows it too. Neither `category` nor `menu_name` changes anything else: a board still names the type by its filename, and the generated page shows `name`. A value that is not a string is rejected.
 - `default_pins` — optional list of the pins a new connector of this type starts with, written like a board's pins: `{ name = "GND", color = "#2C3E50", row = 1 }`, with `color` and `row` optional. It is what the designer's **New Connector** creates, in list order. Without it a new connector starts with one pin named `PIN1`. It does not change what `pinconnect` draws, but the loader checks it on every run, so a malformed `default_pins` in a board's own connector type stops the command with an error. Only `name`, `color` and `row` are allowed; any other key, a `color` that is not a string, or a `row` beyond `rows` is rejected.
 - `style` — how the body is drawn. One of:
   - `box` — a plain rectangle.
@@ -158,7 +164,7 @@ There are two places a type can live, depending on whether it is just for your b
 
 A board-local type is only visible to `pinconnect`. The designer has your config text but not your folder, so it cannot offer the type, and if the name matches a bundled one it will quietly draw the bundled shape instead. It says so when that happens. Render those boards from the [command line](../command-line.md).
 
-**For the shared library.** Create `src/pinconnect/connectors/<TYPE>.toml` in a clone of the PinConnect repository instead. It is then available everywhere, the designer included once you reload it, with nothing else to regenerate or restart.
+**For the shared library.** Create `src/pinconnect/connectors/<TYPE>.toml` in a clone of the PinConnect repository instead. It is then available everywhere, the designer included once you reload it, with nothing else to regenerate or restart. Give it a `category` and a `menu_name` so the designer lists it beside its relatives rather than under `Other`.
 
 Either way, copy an existing type with a similar body as a starting point, and iterate by generating a test board and eyeballing the result — a connector does not have to sit on a real board image while you tune geometry.
 

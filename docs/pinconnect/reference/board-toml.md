@@ -61,7 +61,7 @@ One entry per connector on the board.
 |-------|----------|---------|---------|
 | `id` | yes | — | Unique identifier for the connector. |
 | `name` | yes | — | Label shown on the diagram. |
-| `type` | yes | — | Connector type name, matched to `<type>.toml` in `connector_dir` (e.g. `MX-F-2R`). See [connector types](connector-types.md). |
+| `type` | yes | — | Connector type name, matched to `<type>.toml` in `connector_dir` (e.g. `MX-F-2R`). This is the type's ID, not the name the designer's **Type** menu shows for it (*Micro-Fit 3.0 Dual Row*). See [connector types](connector-types.md). |
 | `x1`, `y1`, `x2`, `y2` | yes | — | Bounding box of the connector on the image, in pixels. `(x1, y1)` and `(x2, y2)` are opposite corners. |
 | `orientation` | no | `0` | Rotation of the connector body in degrees: `0`, `90`, `180`, or `270`. |
 | `label_style` | no | `"staggered"` | How pin labels are arranged on horizontal connectors: `"staggered"`, `"staircase"`, or `"flat"`. See below. |
