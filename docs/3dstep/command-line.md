@@ -1,5 +1,5 @@
 ---
-description: "Install the 3dstep command, render pages from a project, convert STEP files to GLB on a machine, split assemblies too big for the designer, run the designer locally, and serve it by hand."
+description: "Install the 3dstep command, render pages from a project, convert STEP files to GLB on a machine, split assemblies into several STEP files, run the designer locally, and serve it by hand."
 ---
 # Command line and CI
 
@@ -141,7 +141,7 @@ The bundled themes are `default`, `midnight`, `slate` and `workbench`.
 
 ## Convert a STEP file
 
-`3dstep model.step` turns a STEP file into a GLB on your machine, the same model the designer's import makes. It is for pipelines that keep only the STEP file in the repository, and for files too big for the designer: the browser's STEP reader stops at 2 GB of memory, which a STEP file of about 45 MB fills, and the command line has no such limit. To import such a file in the designer instead, [split it](#split-a-big-assembly).
+`3dstep model.step` turns a STEP file into a GLB on your machine, the same model the designer's import makes. It is for pipelines that keep only the STEP file in the repository, and for a file the designer cannot read: the browser's STEP reader stops at 2 GB of memory, and though the designer reads a big file in pieces, a single body too big for that on its own stays too big. The command line has no such limit.
 
 It needs an optional extra, the Python bindings of OpenCascade, which have wheels for Python 3.11 and newer on Windows, Linux and macOS (about 50 to 70 MB to download):
 
@@ -186,7 +186,7 @@ The converter keeps the STEP file's axes, and the GLB always records Z as its up
 
 ## Split a big assembly
 
-The designer's STEP reader stops at 2 GB of memory, which a STEP file of about 45 MB fills while reading. `3dstep split` cuts such an assembly into several smaller STEP files by its top-level components. Each file is one assembly that holds some of the components, each where the original assembly has it and with its names and colors, so the designer imports the files one after another as models of one project that line up. It needs the same extra as [converting](#convert-a-step-file).
+`3dstep split` cuts an assembly into several smaller STEP files by its top-level components. Each file is one assembly that holds some of the components, each where the original assembly has it and with its names and colors, so the designer imports the files one after another as models of one project that line up. Use it when you want the components as separate models, each with its own GLB; the designer does not need it for size, since it reads a big STEP file in pieces by itself (see [Large STEP files](designer.md#1-import-a-model)). It needs the same extra as [converting](#convert-a-step-file).
 
 Start by listing the top-level components, to see what there is to split:
 
@@ -255,7 +255,7 @@ A product that no file takes is left out of the split, with a warning. The spec'
 | `--spec SPLIT.toml` | a file per product | Which components go into which file. |
 | `-o OUT_DIR` | the assembly's folder | The folder to write the files in, made if it is missing. A file that would replace the assembly itself is refused. |
 
-The ToqueCAN 2 split takes about 30 seconds, and the designer then reads the three files in a minute or two. Import them one after another: each becomes a model of the project, and they sit together as in the assembly. The edges are written without their 2D curves, which OpenCascade computes again when it reads a file, so together the files are about the size of the original. One product too big on its own, such as a board with every component modeled, stays too big after the split: drop detail from it in your CAD tool, or convert it with [`3dstep model.step`](#convert-a-step-file) and import the GLB.
+The ToqueCAN 2 split takes about 30 seconds, and the designer then reads the three files in a minute or two. Import them one after another: each becomes a model of the project, and they sit together as in the assembly. The edges are written without their 2D curves, which OpenCascade computes again when it reads a file, so together the files are about the size of the original.
 
 ### Components inside a sub-assembly
 

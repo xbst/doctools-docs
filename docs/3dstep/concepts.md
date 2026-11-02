@@ -18,7 +18,7 @@ There is one renderer, not two. A project and its models produce the same bytes 
 
 The STEP converter is the one place where the two front ends differ. `3dstep model.step` reads a STEP file into the same parts, ids, names and colors as the designer's import, but OpenCascade's newer mesher, which the command line uses, splits some curved faces into different triangles, so its GLB is not the designer's byte for byte. The GLB file is what fixes a page's bytes; see [Convert a STEP file](command-line.md#convert-a-step-file).
 
-The same extra splits an assembly too big for the designer's STEP reader, about 45 MB or more, into several STEP files by its top-level components. `3dstep split` keeps each component where the assembly has it and gives each file an assembly of its own, so the designer imports the files as models of one project that line up; see [Split a big assembly](command-line.md#split-a-big-assembly).
+The same extra splits an assembly into several STEP files by its top-level components, for when you want them as separate models of a project. `3dstep split` keeps each component where the assembly has it and gives each file an assembly of its own, so the designer imports the files as models of one project that line up; see [Split a big assembly](command-line.md#split-a-big-assembly). The designer does not need it for size: it reads a STEP file too big for its reader in pieces by itself.
 
 Keep the project and its models. A page is derived from them, so when the assembly changes you edit and regenerate rather than starting over. You can write a project by hand; the designer is a convenience, not a requirement, though it is the only way to import a STEP file without the optional extra.
 
