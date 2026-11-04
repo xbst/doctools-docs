@@ -48,7 +48,7 @@ zensical serve
 - `docs/` — the pages. `pinconnect/`, `3dstep/`, `webflash/`, `md-iframe/` and `guides/` hold each tool's docs and the shared topics; `assets/pinconnect/`, `assets/3dstep/` and `assets/webflash/` hold the generated doc images.
 - `docs/pinouts/` — the sources of the PinConnect live examples, one folder per board. The generated `*.pinout.html` files are git-ignored.
 - `docs/3d/` — the sources of the 3DStep live examples, one folder per assembly with its TOMLs and GLB models. The generated `*.3dstep.html` files are git-ignored.
-- `docs/firmware/` — the sources of the WebFlash live examples, one folder per board TOML with the files it names. The generated `*.webflash.html` files are git-ignored. Their cards load WebFlash's runtime from <https://webflash.isiks.tech>; until it answers they show their static fallback.
+- `docs/firmware/` — the sources of the WebFlash live examples, one folder per board TOML with the files it names. The generated `*.webflash.html` files are git-ignored. Their cards load WebFlash's runtime from <https://webflash.isiks.tech>, so they run what WebFlash's `master` deploys there; without JavaScript, or when it does not answer, they show their static fallback.
 - `tools/` — the generators for the doc images; see [`tools/README.md`](tools/README.md).
 - `layouts/` — the social card layout.
 
