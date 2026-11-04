@@ -1,0 +1,37 @@
+# Isik's Tech docs site WebFlash theme (docs/firmware/isikstech.toml).
+#
+# The WebFlash counterpart of docs/pinouts/isikstech.toml (PinConnect) and
+# docs/3d/isikstech.toml (3DStep): the page is transparent, so the card sits
+# on the site's own background (#F8F8F8 light, #131313 dark), with the
+# site's amber for the buttons and the progress bars, and Roboto like the
+# site. It sits outside the board folders, so the CI loop never renders it.
+
+[theme]
+name = "isikstech"
+
+[font]
+family = "Roboto"
+source = "google"
+weights = "400;500;600"
+
+[font.mono]
+family = "Roboto Mono"
+source = "google"
+weights = "400;500"
+
+[colors.light]
+bg             = "transparent"
+panel-bg       = "#ffffff"
+panel-border   = "#e2e2e2"
+accent         = "#ffa200"
+accent-text    = "#1a1a1a"
+control-border = "#d0d0d0"
+
+[colors.dark]
+bg             = "transparent"
+panel-bg       = "#1c1c1c"
+panel-border   = "#2e2e2e"
+accent         = "#ffbf00"
+accent-text    = "#131313"
+control-bg     = "#242424"
+control-border = "#3d3d3d"

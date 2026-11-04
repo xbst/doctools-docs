@@ -34,6 +34,7 @@ jobs:
       - run: pip install "git+https://github.com/xbst/PinConnect.git@master"
       - run: pip install "git+https://github.com/xbst/3DStep.git@master"
       - run: pip install "git+https://github.com/xbst/md-iframe.git@master"
+      - run: pip install "git+https://github.com/xbst/webflash.git@master"
       - name: Generate the live example pinouts
         run: |
           shopt -s nullglob
@@ -47,6 +48,13 @@ jobs:
           for toml in docs/3d/*/*.toml; do
             echo "3dstep $toml"
             3dstep "$toml"
+          done
+      - name: Generate the live example firmware cards
+        run: |
+          shopt -s nullglob
+          for toml in docs/firmware/*/*.toml; do
+            echo "webflash $toml"
+            webflash "$toml" -i
           done
       - run: zensical build --clean
       - uses: actions/upload-pages-artifact@v5

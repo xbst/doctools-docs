@@ -1,0 +1,52 @@
+# examples/stm32g0b1-usb from the webflash repository, on a real board: the
+# Isik's Tech Birds' Nest, an STM32G0B1 on USB with an 8 MHz crystal (its
+# manual flashes it with DFU and no bootloader). Klipper or Kalico, with
+# Katapult flashed beside it or already in the first 8 KiB.
+
+[board]
+title = "Birds' Nest (STM32G0B1 over USB)"
+theme = "isikstech"
+theme_dir = ".."
+description = """
+Klipper firmware for the Birds' Nest USB toolchanger hub: an STM32G0B1 connected over USB, with an 8 MHz crystal.
+
+Tick **Katapult** to flash the bootloader with it over DFU. Already have Katapult? Leave it unticked and keep **Katapult (8 KiB)**; updates then need no buttons. See the [Klipper bootloader guide](https://www.klipper3d.org/Bootloaders.html)."""
+image = "birds-nest.webp"
+
+[firmware]
+project = "klipper"
+projects = ["klipper", "kalico"]
+version = "latest"
+
+# Unticked when the card opens: most of these boards have Katapult already.
+[katapult]
+version = "latest"
+default = false
+
+# Exactly what `make savedefconfig` writes: everything left out holds its
+# default, which for an STM32G0B1 on Klipper master is an 8 KiB bootloader,
+# an 8 MHz crystal and USB on PA11/PA12. Katapult's defaults are the same
+# chip settings, with its application at 8 KiB and no deployer.
+[config]
+defconfig = """
+CONFIG_MACH_STM32=y
+CONFIG_MACH_STM32G0B1=y
+"""
+katapult = """
+CONFIG_MACH_STM32=y
+CONFIG_MACH_STM32G0B1=y
+"""
+
+[[option]]
+symbol = "STM32_FLASH_START_2000"
+label = "Bootloader"
+values = ["STM32_FLASH_START_2000", "STM32_FLASH_START_0000"]
+labels = { STM32_FLASH_START_2000 = "Katapult (8 KiB)", STM32_FLASH_START_0000 = "No bootloader (flash with DFU)" }
+help = "Katapult must already be on the board for the 8 KiB offset; otherwise pick No bootloader."
+
+[flash]
+methods = ["katapult", "dfu", "download"]
+
+[flash.instructions]
+katapult = "If Klipper is running on the board, WebFlash asks it to restart into Katapult. Otherwise double-tap RESET, then click Connect."
+dfu = "Hold down BOOT. While holding it, press RESET. Release RESET first, then BOOT, and click Connect. On Windows, if the browser lists the bootloader but cannot open it, install the WinUSB driver on it with Zadig."
