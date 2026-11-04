@@ -22,6 +22,7 @@ At build time the extension turns that into an `<iframe>` that loads the page. D
 - The **`style`** attribute is passed straight through. If you omit it, the default is `min-height:60vh;width:100%`.
 - A **`class`** you add is kept, beside md-iframe's own.
 - The iframe is set to `loading="lazy"` and `allowfullscreen`.
+- Any other attribute you add, such as `allow`, is passed through to the iframe.
 
 Only images tagged `type=iframe` are affected; ordinary images pass through untouched.
 
@@ -62,11 +63,21 @@ pinconnect board.toml -o docs/pinouts/board.pinout.html
 
 Remember to copy the board image next to it, or use `-i` to embed the image into the HTML. To generate every page on each deploy instead of committing them, see [Publish on a docs site](../guides/publishing.md).
 
+## Pages that talk to USB devices
+
+A [WebFlash](../webflash/index.md) card flashes a board over WebUSB and Web Serial. Served from your docs site's own origin, beside the Markdown, it needs nothing more. Served from another origin, the iframe needs `allow="usb; serial"`, which md-iframe keeps:
+
+```markdown
+![Flash Klipper to the board](https://example.org/board.webflash.html){ type=iframe allow="usb; serial" }
+```
+
+Without it the browser refuses both device pickers ("disallowed by permissions policy"), and the card says so: it still builds the firmware and offers the files, with a link to open the card in its own tab. Even with it, browsers open no folder picker in a frame from another origin, so an RP2040's UF2 drive becomes a `.uf2` download there. See [Embedding a card](../webflash/embedding.md).
+
 ## Height
 
 Most embedded pages render at a fixed height (your `style`, or the `min-height:60vh` default), which is what you want for a diagram that fills its frame.
 
-A page can also report its content height, and md-iframe then grows or shrinks the iframe to fit, with no scrollbar inside it. PinConnect pinouts do this when their theme stacks the connector list below the board on narrow screens, and [3DStep](../3dstep/index.md) pages always do. md-iframe adds one small listener per page that has an embed; there is nothing to configure. A page that never reports a height keeps the authored `(min-)height`.
+A page can also report its content height, and md-iframe then grows or shrinks the iframe to fit, with no scrollbar inside it. PinConnect pinouts do this when their theme stacks the connector list below the board on narrow screens, and [3DStep](../3dstep/index.md) pages and [WebFlash](../webflash/index.md) cards always do. md-iframe adds one small listener per page that has an embed; there is nothing to configure. A page that never reports a height keeps the authored `(min-)height`.
 
 [Auto-height protocol](auto-height.md) describes the message, so other tools and hand-written pages can use it too.
 

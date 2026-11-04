@@ -1,5 +1,5 @@
 ---
-description: "Open-source documentation tools from Isik's Tech: PinConnect turns a board photo into an interactive pinout, 3DStep turns a CAD assembly into interactive 3D assembly instructions, and md-iframe embeds pages like them in MkDocs and Zensical sites."
+description: "Open-source documentation tools from Isik's Tech: PinConnect turns a board photo into an interactive pinout, 3DStep turns a CAD assembly into interactive 3D assembly instructions, WebFlash builds and flashes 3D printer firmware in the browser, and md-iframe embeds pages like them in MkDocs and Zensical sites."
 hide:
   - footer
   - toc
@@ -48,6 +48,25 @@ Open-source tools for writing better hardware documentation. Initially built for
 
     [Documentation](3dstep){ .md-button .md-button--primary } [Repo](https://github.com/xbst/3DStep){ .md-button }
 
+-    ## WebFlash
+    ---
+
+    WebFlash configures, builds and flashes Klipper, Kalico and Katapult firmware for 3D printer boards in the browser, with nothing to install: the project's own `make menuconfig` options, a compiler that runs on your computer, and flashing over USB and CAN. Use it at [webflash.isiks.tech](https://webflash.isiks.tech), or turn a board's settings into a flashing card for its docs.
+
+    === "Flashing card"
+        ![Flash Klipper to the Birds' Nest](firmware/stm32g0b1-usb/stm32g0b1-usb.webflash.html){ type=iframe }
+
+        *A card for the [Birds' Nest](https://docs.isiks.tech/birds-nest/usb/manual/): pick Klipper or Kalico and a version, and the card builds the firmware with the board's settings and flashes it, in Chrome or Edge. Generated with WebFlash using a custom theme that matches this site, embedded with [md-iframe](#md-iframe).*
+
+    === "The site"
+        ![The WebFlash site's first step: Klipper picked with Katapult ticked, each with its version, and the download size beside Next](assets/webflash/site-firmware.webp)
+
+        *The site's first step, with Klipper and Katapult picked to be built and flashed together. Configure, Build, Flash and Embed follow.*
+
+    ---
+
+    [Documentation](webflash){ .md-button .md-button--primary } [Repo](https://github.com/xbst/webflash){ .md-button }
+
 -     ##md-iframe
     ---
     A Python-Markdown extension for MkDocs and Zensical sites. It turns an image-style tag into an `<iframe>` that sizes itself to the page inside it and shows a visible error when the file is missing. Supports syncing dark/light mode and automatic resizing.
@@ -62,4 +81,4 @@ Open-source tools for writing better hardware documentation. Initially built for
 
 ## License
 
-PinConnect, 3DStep and md-iframe are licensed under GPL-3.0. Their source is on GitHub: [xbst/PinConnect](https://github.com/xbst/PinConnect), [xbst/3DStep](https://github.com/xbst/3DStep) and [xbst/md-iframe](https://github.com/xbst/md-iframe).
+PinConnect, 3DStep, WebFlash and md-iframe are licensed under GPL-3.0. Their source is on GitHub: [xbst/PinConnect](https://github.com/xbst/PinConnect), [xbst/3DStep](https://github.com/xbst/3DStep), [xbst/webflash](https://github.com/xbst/webflash) and [xbst/md-iframe](https://github.com/xbst/md-iframe).
