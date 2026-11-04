@@ -1,6 +1,6 @@
 site_name: Isik's Tech Documentation Tools
 site_url: https://doctools.isiks.tech
-site_description: Documentation for Isik's Tech's open-source documentation tools, including PinConnect interactive pinouts, 3DStep and the md-iframe Markdown extension.
+site_description: Documentation for Isik's Tech's open-source documentation tools, including PinConnect interactive pinouts, 3DStep assembly instructions, WebFlash firmware flashing and the md-iframe Markdown extension.
 site_author: XBST LLC
 copyright: Copyright &copy; 2026 XBST LLC
 repo_url: https://github.com/xbst
@@ -137,6 +137,36 @@ nav:
       - "Light and dark": 3dstep/examples/light-dark.md
     - "Open the designer": "https://3dstep.isiks.tech"
     - "GitHub Repository": "https://github.com/xbst/3DStep"
+  - WebFlash:
+    - webflash/index.md
+    - "Getting started": webflash/getting-started.md
+    - "The site":
+      - "Firmware and versions": webflash/site/firmware.md
+      - "Configure": webflash/site/configure.md
+      - "Build": webflash/site/build.md
+      - "Flash": webflash/site/flash.md
+      - "Embed": webflash/site/embed.md
+    - "Flashing methods": webflash/flashing.md
+    - "Embedding a card": webflash/embedding.md
+    - "Command line and CI": webflash/command-line.md
+    - "Troubleshooting": webflash/troubleshooting.md
+    - "How it builds": webflash/how-it-builds.md
+    - "Reference":
+      - "Board TOML": webflash/reference/board-toml.md
+      - "Themes": webflash/reference/themes.md
+      - "The generated page": webflash/reference/page.md
+      - "Chips, methods and browsers": webflash/reference/support.md
+      - "Site URLs and storage": webflash/reference/site.md
+    - "Live examples":
+      - "A board on USB": webflash/examples/usb-board.md
+      - "A CAN toolhead": webflash/examples/can-toolhead.md
+      - "RP2040": webflash/examples/rp2040.md
+      - "Katapult alone": webflash/examples/katapult.md
+      - "LPC1769": webflash/examples/lpc1769.md
+      - "A prebuilt file": webflash/examples/prebuilt.md
+      - "Light and dark": webflash/examples/light-dark.md
+    - "Open the site": "https://webflash.isiks.tech"
+    - "GitHub Repository": "https://github.com/xbst/webflash"
   - md-iframe:
     - md-iframe/index.md
     - "Embedding pages": md-iframe/embedding.md
