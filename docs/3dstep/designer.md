@@ -132,8 +132,8 @@ The tools, in groups:
 | Tool | Key | What it does |
 |---|---|---|
 | **Select** | | Selects parts, arrows and labels. |
-| **Move** | `G` | Drag the gizmo's arrows or planes to move the selection. It moves in 1 mm steps; hold `Alt` to move freely. |
-| **Rotate** | `R` | Drag the gizmo's rings to turn the selection about its center, in 15° steps; hold `Alt` to turn freely. |
+| **Move** | `G` | Drag the gizmo's arrows or planes to move the selection: parts, or an arrow. It moves in 1 mm steps; hold `Alt` to move freely. A straight arrow also gets a dot on its tail: drag it along the arrow to change its length. |
+| **Rotate** | `R` | Drag the gizmo's rings to turn the selection about its center, in 15° steps; hold `Alt` to turn freely. A straight arrow turns about its middle, a rotate arrow about its center. |
 | **−X +X −Y +Y −Z +Z** | | Move the selection along an axis by the distance in the field beside them, in millimeters. Presses add up. |
 | **Assemble** | | Put the selection back in its assembled place, or with nothing selected every part of the step. |
 | **Explode step** | | Stack the parts the step highlights along the up axis, above the rest and the distance apart, so none overlap. |
@@ -173,7 +173,7 @@ The inspector edits whatever is selected. With nothing selected, it edits the cu
 
 With parts selected, it shows their **Id** (fixed), their name in the CAD file, a display **Name**, and a **Color** that overrides the model's in the shaded style; then the current step's **Visible**, **Highlight** and **Ghost** checkboxes, the move's **Offset** in millimeters and **Rotate** in degrees about each axis, the **Auto arrow** checkbox, and buttons for the Move and Rotate tools, **Fit view**, **Isolate** and **Remove from step**.
 
-With an arrow selected, it edits its **Kind** (straight, or rotate around an axis), its two points (**From** and **To**, or **Center** and **Axis to**), the rotate arrow's **Turns** and **Radius**, a **Color**, a **Label** at its tail and the part it is **Attached** to. A label has its **Text**, **Anchor**, **Side** and attachment. **Pick** beside a point takes it from a click in the viewport. Unchecking **Attached** converts the points to model coordinates, and checking it again converts them back, so nothing moves on screen. **Step** returns to the step.
+With an arrow selected, it edits its **Kind** (straight, or rotate around an axis), its two points (**From** and **To**, or **Center** and **Axis to**), a straight arrow's **Length** in millimeters, the rotate arrow's **Turns** and **Radius**, a **Color**, a **Label** at its tail and the part it is **Attached** to. A label has its **Text**, **Anchor**, **Side** and attachment. **Pick** beside a point takes it from a click in the viewport. Unchecking **Attached** converts the points to model coordinates, and checking it again converts them back, so nothing moves on screen. To move or turn a placed arrow as a whole, select it and drag it with the **Move** or **Rotate** tool: its gizmo sits on the arrow, both points follow, and they are written in the frame of the part it is attached to, one undo step per drag. A new **Length**, typed or set by dragging the dot on the tail under the **Move** tool (in 1 mm steps; hold `Alt` for free), keeps the head where it is and moves the tail along the arrow. **Step** returns to the step.
 
 A rotate arrow placed with the tool turns clockwise as you look at the surface you clicked, the way a screw goes in: its **Axis to** point is inside the part. To show one coming out, make its **Turns** negative; [`turns`](reference/project-toml.md#steparrow) explains the rule.
 
